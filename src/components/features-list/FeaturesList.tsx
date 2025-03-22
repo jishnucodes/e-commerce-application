@@ -52,7 +52,7 @@ const FeaturesList = () => {
   return (
     <Card
     sx={{
-      width: { xs: "100%", sm: "70%", md: "100%" },
+      width: { xs: "100%", sm: "100%", md: "100%" },
       height: "auto",
       mt: "20px",
     }}
