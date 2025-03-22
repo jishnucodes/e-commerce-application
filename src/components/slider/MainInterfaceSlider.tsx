@@ -16,8 +16,12 @@ import {
   CardMedia,
   Typography,
 } from "@mui/material";
+import { useSelector } from "react-redux";
+import { RootState } from "../../../store";
 
 const MainInterfaceSlider: React.FC = () => {
+  const { isSidebarOpen } = useSelector((state: RootState) => state.header);
+
   const slides = [
     { id: 1, title: "Women's Fashion", img: "/adv-7.jpg" },
     { id: 2, title: "Hot Sale", img: "/adv-9.jpg" },
@@ -29,7 +33,7 @@ const MainInterfaceSlider: React.FC = () => {
   return (
     <Box
       sx={{
-        width: { sm: "70%", md: "75%" },
+        width: { sm: "70%", md: isSidebarOpen ? "75%" : "100%" },
         padding: 2,
         height: "495px",
         boxShadow: "0 4px 12px rgba(0,0,0,0.1)",

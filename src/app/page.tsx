@@ -14,8 +14,12 @@ import SliderComponent from "@/components/slider/SliderComponent";
 import MainInterfaceSlider from "@/components/slider/MainInterfaceSlider";
 import Sidebar from "@/components/sidebar/Sidebar";
 import FeaturesList from "@/components/features-list/FeaturesList";
+import { useSelector } from "react-redux";
+import { RootState } from "../../store";
 
 export default function Home() {
+
+  const { isSidebarOpen } = useSelector((state: RootState) => state.header);
   return (
     // <Box>
     //    <Card sx={{ maxWidth: "600px",width: "100%"}}>
@@ -52,6 +56,7 @@ export default function Home() {
         flexDirection: "column",
       }}
     >
+      
       <Box
         sx={{
           display: "flex",
@@ -59,18 +64,22 @@ export default function Home() {
           gap: 2,
         }}
       >
-        {/* Sidebar: 25% Width */}
-        <Box
-          component="aside"
-          sx={{
-            width: { xs: "100%", sm: "30%", md: "25%" }, // Full-width on small screens, 25% on md+
-            flexShrink: 0, // Prevent sidebar from shrinking
-            display: { xs: "none", sm: "block" }, // Hide sidebar on extra-small screens
-          }}
-          height="495px"
-        >
-          <Sidebar />
-        </Box>
+        {
+          isSidebarOpen ? (
+            <Box
+            component="aside"
+            sx={{
+              width: { xs: "100%", sm: "30%", md: "25%" }, // Full-width on small screens, 25% on md+
+              flexShrink: 0, // Prevent sidebar from shrinking
+              display: { xs: "none", sm: "block" }, // Hide sidebar on extra-small screens
+            }}
+            height="495px"
+          >
+            <Sidebar />
+          </Box>
+          ) : null
+        }
+       
         
         <MainInterfaceSlider />
       </Box>

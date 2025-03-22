@@ -5,8 +5,21 @@ import Image from "next/image";
 import Searchbar from "./Searchbar";
 import WidgetsOutlinedIcon from '@mui/icons-material/WidgetsOutlined';
 import ShoppingCartOutlinedIcon from '@mui/icons-material/ShoppingCartOutlined';
+import { AppDispatch } from "../../../../store";
+import { useDispatch } from "react-redux";
+import { showSidebar } from "@/slices/headerSlice";
+import { useState } from "react";
 
 const SubHeader = () => {
+
+  const dispatch: AppDispatch = useDispatch();
+
+  const [isClicked, setIsClicked] = useState<boolean>(true);
+
+  const handleMenuIconClick = () => {
+    setIsClicked(!isClicked)
+    dispatch(showSidebar(isClicked))
+  }
   return (
     <Box
       sx={{
@@ -93,6 +106,7 @@ const SubHeader = () => {
           variant='contained'
           color="primary"
           endIcon={<WidgetsOutlinedIcon />}
+          onClick={handleMenuIconClick}
         >
           Categories
         </Button>
