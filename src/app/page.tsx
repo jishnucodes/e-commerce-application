@@ -8,6 +8,7 @@ import {
   CardContent,
   CardMedia,
   Typography,
+  useTheme,
 } from "@mui/material";
 import Image from "next/image";
 import SliderComponent from "@/components/slider/SliderComponent";
@@ -16,10 +17,12 @@ import Sidebar from "@/components/sidebar/Sidebar";
 import FeaturesList from "@/components/features-list/FeaturesList";
 import { useSelector } from "react-redux";
 import { RootState } from "../../store";
+import BottomNavigationComponent from "@/components/bottom-navigation/BottomNavigation";
 
 export default function Home() {
 
   const { isSidebarOpen } = useSelector((state: RootState) => state.header);
+  
   return (
     // <Box>
     //    <Card sx={{ maxWidth: "600px",width: "100%"}}>
@@ -85,6 +88,7 @@ export default function Home() {
       </Box>
       <FeaturesList />
       <SliderComponent />
+      
     </Box>
   );
 }

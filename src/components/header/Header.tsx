@@ -154,7 +154,8 @@ const Header = () => {
           <Toolbar 
             sx={{
               height: "40px",
-              minHeight: { xs: "40px", sm: "40px" } // Apply different minHeight based on breakpoints
+              minHeight: { xs: "40px", sm: "40px" },
+              justifyContent: {sm: 'center', md: 'space-between'}
             }}
           >
             <IconButton
@@ -169,7 +170,7 @@ const Header = () => {
             <Typography
               variant="h6"
               component="div"
-              sx={{ flexGrow: 1, display: { xs: "none", sm: "block" }, fontSize: '16px' }}
+              sx={{ flexGrow: 1, display: { xs: "none", sm: "block" }, fontSize: {sm: '12px', md:'16px'} }}
             >
               Welcome To Carrefour Store
             </Typography>
