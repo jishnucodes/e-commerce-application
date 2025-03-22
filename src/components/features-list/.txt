@@ -20,56 +20,55 @@ const FeaturesList = () => {
       id: 1,
       primaryText: "24/7 Support",
       secondaryText: "Support every time",
-      icon: <HeadphonesOutlinedIcon fontSize="large" color="primary" />,
+      icon: <HeadphonesOutlinedIcon />,
     },
     {
       id: 2,
       primaryText: "Accept Payment",
       secondaryText: "Visa, PayPal, Master",
-      icon: <PaymentOutlinedIcon fontSize="large" color="primary"/>,
+      icon: <PaymentOutlinedIcon />,
     },
     {
       id: 3,
       primaryText: "Secured Payment",
       secondaryText: "100% Secured",
-      icon: <HttpsOutlinedIcon fontSize="large" color="primary"/>,
+      icon: <HttpsOutlinedIcon fontSize="large" color="primary" />,
     },
     {
       id: 4,
       primaryText: "Free Shipping",
       secondaryText: "Order over $300",
-      icon: <LocalShippingOutlinedIcon fontSize="large" color="primary"/>,
+      icon: <LocalShippingOutlinedIcon fontSize="large" color="primary" />,
     },
     {
       id: 5,
       primaryText: "30 Days Return",
       secondaryText: "30 Days Guarantee",
-      icon: <RedeemOutlinedIcon fontSize="large" color="primary"/>,
+      icon: <RedeemOutlinedIcon fontSize="large" color="primary" />,
     },
   ];
 
   return (
-    <Card sx={{ width: "100%", height: "auto", mt:"20px"}}>
-      <CardActionArea sx={{ display: "flex", flexDirection: "row", justifyContent:"space-between", height: "100%" }}>
+    <Card sx={{ width: "100%", height: "460px" }}>
+      <CardActionArea sx={{ display: "flex", flexDirection: "column", height: "100%" }}>
         {features.map((feature) => (
-       <CardContent
-       key={feature.id}
-       sx={{
-         display: "flex",
-         alignItems: "center",
-         justifyContent: "space-between", // Changed from space-evenly
-         gap: 2,
-         borderRight: "1px solid",
-         borderColor: "divider",
-         py: 1,
-         "&:last-child": {
-           borderRight: "none",
-         },
-       }}
-     >
+          <CardContent
+            key={feature.id}
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              gap: 2,
+              borderBottom: "1px solid",
+              borderColor: "divider",
+              py: 1,
+              "&:last-child": {
+                borderBottom: "none",
+              },
+            }}
+          >
             {feature.icon}
             <Box>
-              <Typography variant="h6" sx={{ fontWeight: 700 }}>
+              <Typography variant="h6" sx={{ fontWeight: 600 }}>
                 {feature.primaryText}
               </Typography>
               <Typography variant="body2" sx={{ color: "text.secondary" }}>
