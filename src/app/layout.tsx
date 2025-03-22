@@ -5,10 +5,12 @@ import "./globals.css";
 import Header from "@/components/header/Header";
 import Sidebar from "@/components/sidebar/Sidebar";
 import { Box, Container } from "@mui/material";
+import BottomNavigationComponent from "@/components/bottom-navigation/BottomNavigation";
 
 export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
+ 
   return (
     <html lang="en">
       <head>
@@ -48,6 +50,7 @@ export default function RootLayout({
               {children}
             </Box>
           </Box>
+          <BottomNavigationComponent />
         </StoreProvider>
       </body>
     </html>

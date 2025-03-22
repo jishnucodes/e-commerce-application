@@ -33,7 +33,7 @@ const MainInterfaceSlider: React.FC = () => {
   return (
     <Box
       sx={{
-        width: { sm: "70%", md: isSidebarOpen ? "75%" : "100%" },
+        width: { xs: "100%", sm: isSidebarOpen ? "70%" : "100%", md: isSidebarOpen ? "75%" : "100%" },
         padding: 2,
         height: "495px",
         boxShadow: "0 4px 12px rgba(0,0,0,0.1)",
@@ -82,28 +82,28 @@ const MainInterfaceSlider: React.FC = () => {
               </Typography>
             </Box> */}
             <Card sx={{ width: "100%", height: "460px" }}>
-              <CardActionArea sx={{ display: "flex", height: "100%" }}>
+              <CardActionArea sx={{ display: "flex", flexDirection: {xs: "column", sm: "column", md: "row"}, height: "100%" }}>
                 <CardMedia
                   component="img"
                   height="100%"
                   image={slide.img}
                   alt="green iguana"
                   sx={{
-                    width: "50%", // Adjust the width as needed
-                    aspectRatio: "3/4",
+                    width: {xs: "100%", sm: "100%", md:"50%"}, // Adjust the width as needed
+                    aspectRatio: {sx: "4/3",sm: "3/4",md:"3/4"},
                     objectFit: "cover",
-                    order: slide.id % 2 === 0 ? 1 : 0,
+                    order:{ xs: 0, sm: 0, md: slide.id % 2 === 0 ? 1 : 0},
                     padding: "10px",
                     borderRadius: "18px"
                   }}
                 />
                 <CardContent
                   sx={{
-                    width: "50%",
+                    width: {xs: "100%", sm: "100%", md:"50%"},
                     display: "flex",
                     flexDirection: "column",
                     justifyContent: "space-between",
-                    order: slide.id % 2 === 0 ? 0 : 1
+                    order: { xs: 0, sm: 0, md: slide.id % 2 === 0 ? 0 : 1}
                   }}
                 >
                   <Typography gutterBottom variant="h5" component="div">
