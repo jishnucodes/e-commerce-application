@@ -1,74 +1,21 @@
-"use client";
-
-import React from "react";
-import {
-  Card,
-  CardActionArea,
-  CardContent,
-  Typography,
-  Box
-} from "@mui/material";
-import HeadphonesOutlinedIcon from "@mui/icons-material/HeadphonesOutlined";
-import PaymentOutlinedIcon from "@mui/icons-material/PaymentOutlined";
-import HttpsOutlinedIcon from "@mui/icons-material/HttpsOutlined";
-import LocalShippingOutlinedIcon from "@mui/icons-material/LocalShippingOutlined";
-import RedeemOutlinedIcon from "@mui/icons-material/RedeemOutlined";
-
-const FeaturesList = () => {
-  const features = [
-    {
-      id: 1,
-      primaryText: "24/7 Support",
-      secondaryText: "Support every time",
-      icon: <HeadphonesOutlinedIcon />,
-    },
-    {
-      id: 2,
-      primaryText: "Accept Payment",
-      secondaryText: "Visa, PayPal, Master",
-      icon: <PaymentOutlinedIcon />,
-    },
-    {
-      id: 3,
-      primaryText: "Secured Payment",
-      secondaryText: "100% Secured",
-      icon: <HttpsOutlinedIcon fontSize="large" color="primary" />,
-    },
-    {
-      id: 4,
-      primaryText: "Free Shipping",
-      secondaryText: "Order over $300",
-      icon: <LocalShippingOutlinedIcon fontSize="large" color="primary" />,
-    },
-    {
-      id: 5,
-      primaryText: "30 Days Return",
-      secondaryText: "30 Days Guarantee",
-      icon: <RedeemOutlinedIcon fontSize="large" color="primary" />,
-    },
-  ];
-
-  return (
-    <Card sx={{ width: "100%", height: "460px" }}>
-      <CardActionArea sx={{ display: "flex", flexDirection: "column", height: "100%" }}>
-        {features.map((feature) => (
-          <CardContent
-            key={feature.id}
-            sx={{
-              display: "flex",
-              alignItems: "center",
-              gap: 2,
-              borderBottom: "1px solid",
-              borderColor: "divider",
-              py: 1,
-              "&:last-child": {
-                borderBottom: "none",
-              },
-            }}
-          >
+<CardContent
+       key={feature.id}
+       sx={{
+         display: "flex",
+         alignItems: "center",
+         justifyContent: "space-between",
+         gap: 2,
+         borderRight: "1px solid",
+         borderColor: "divider",
+         py: 1,
+         "&:last-child": {
+           borderRight: "none",
+         },
+       }}
+     >
             {feature.icon}
             <Box>
-              <Typography variant="h6" sx={{ fontWeight: 600 }}>
+              <Typography variant="h6" sx={{ fontWeight: 700 }}>
                 {feature.primaryText}
               </Typography>
               <Typography variant="body2" sx={{ color: "text.secondary" }}>
@@ -76,10 +23,3 @@ const FeaturesList = () => {
               </Typography>
             </Box>
           </CardContent>
-        ))}
-      </CardActionArea>
-    </Card>
-  );
-};
-
-export default FeaturesList;

@@ -15,6 +15,7 @@ import LocalShippingOutlinedIcon from "@mui/icons-material/LocalShippingOutlined
 import RedeemOutlinedIcon from "@mui/icons-material/RedeemOutlined";
 
 const FeaturesList = () => {
+  
   const features = [
     {
       id: 1,
@@ -49,37 +50,56 @@ const FeaturesList = () => {
   ];
 
   return (
-    <Card sx={{ width: "100%", height: "auto", mt:"20px"}}>
-      <CardActionArea sx={{ display: "flex", flexDirection: "row", justifyContent:"space-between", height: "100%" }}>
-        {features.map((feature) => (
-       <CardContent
-       key={feature.id}
-       sx={{
-         display: "flex",
-         alignItems: "center",
-         justifyContent: "space-between", // Changed from space-evenly
-         gap: 2,
-         borderRight: "1px solid",
-         borderColor: "divider",
-         py: 1,
-         "&:last-child": {
-           borderRight: "none",
-         },
-       }}
-     >
-            {feature.icon}
-            <Box>
-              <Typography variant="h6" sx={{ fontWeight: 700 }}>
-                {feature.primaryText}
-              </Typography>
-              <Typography variant="body2" sx={{ color: "text.secondary" }}>
-                {feature.secondaryText}
-              </Typography>
-            </Box>
-          </CardContent>
-        ))}
-      </CardActionArea>
-    </Card>
+    <Card
+    sx={{
+      width: { xs: "100%", sm: "70%", md: "100%" },
+      height: "auto",
+      mt: "20px",
+    }}
+  >
+    <CardActionArea
+  sx={{
+    display: "flex",
+    flexDirection: { xs: "column", sm: "column", md: "row" }, // Column for xs & sm, Row for md+
+    justifyContent: "center", // Centers children horizontally
+    alignItems: "center", // Ensures items are centered in the flex container
+    height: "100%",
+    textAlign: "center", // Ensures text is centered
+  }}
+>
+  {features.map((feature) => (
+    <CardContent
+      key={feature.id}
+      sx={{
+        display: "flex",
+        flexDirection: {xs:"column",sm:"column",md:"row"}, // Stack icon and text vertically
+        alignItems: "center", // Center items horizontally
+        justifyContent: "center", // Center items vertically
+        gap: 2,
+        borderRight: { xs: "none", md: "1px solid" },
+        borderColor: "divider",
+        py: 2,
+        width: { xs: "100%", md: "auto" }, // Full width for small screens, auto for larger
+        flex: 1,
+        textAlign: "center",
+        "&:last-child": { borderRight: "none" },
+        "&:hover": { backgroundColor: "action.hover" }
+      }}
+    >
+      {feature.icon}
+      <Box>
+        <Typography variant="h6" sx={{ fontWeight: 700 }}>
+          {feature.primaryText}
+        </Typography>
+        <Typography variant="body2" sx={{ color: "text.secondary" }}>
+          {feature.secondaryText}
+        </Typography>
+      </Box>
+    </CardContent>
+  ))}
+</CardActionArea>
+
+  </Card>
   );
 };
 
