@@ -5,6 +5,7 @@ import "./globals.css";
 import Header from "@/components/header/Header";
 import Sidebar from "@/components/sidebar/Sidebar";
 import { Box, Container } from "@mui/material";
+import Footer from "@/components/footer/Footer";
 
 export default function RootLayout({
   children,
@@ -47,6 +48,7 @@ export default function RootLayout({
             >
               {children}
             </Box>
+            <Footer/>
           </Box>
         </StoreProvider>
       </body>
