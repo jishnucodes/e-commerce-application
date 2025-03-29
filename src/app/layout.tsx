@@ -5,11 +5,8 @@ import "./globals.css";
 import Header from "@/components/header/Header";
 import Sidebar from "@/components/sidebar/Sidebar";
 import { Box, Container } from "@mui/material";
-<<<<<<< HEAD
 import BottomNavigationComponent from "@/components/bottom-navigation/BottomNavigation";
-=======
 import Footer from "@/components/footer/Footer";
->>>>>>> origin/RAD
 
 export default function RootLayout({
   children,
