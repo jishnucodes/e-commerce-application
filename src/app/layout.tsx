@@ -9,7 +9,7 @@ import { Box, Container } from "@mui/material";
 import BottomNavigationComponent from "@/components/bottom-navigation/BottomNavigation";
 =======
 import Footer from "@/components/footer/Footer";
->>>>>>> RAD
+>>>>>>>>> Temporary merge branch 2
 
 export default function RootLayout({
   children,
