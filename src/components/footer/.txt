@@ -1,0 +1,232 @@
+
+
+"use client";
+import React from "react";
+import { Container, Box, Typography, Button, IconButton } from "@mui/material";
+import { Home, Info, ContactMail, Facebook, Twitter, Instagram } from "@mui/icons-material";
+import Grid from '@mui/material/Grid2';
+import { motion,useScroll, useTransform } from "framer-motion";
+
+const Footer = () => {
+  const { scrollYProgress } = useScroll(); // Tracks scroll progress
+  const y = useTransform(scrollYProgress, [0, 1], [100, 0]); // Moves footer up
+  // Animation variants for reusability
+  const containerVariants = {
+    hidden: { opacity: 1, y: 50, },
+    visible: {opacity: 1, y: 0,
+      transition: { type: "spring", stiffness: 120, damping: 15, duration: 0.1, when: "beforeChildren",staggerChildren: 0.2,}}};
+
+  const itemVariants = {
+    hidden: { opacity: 0, x: -20 },
+    visible: { opacity: 1, x: 0, transition: {
+      duration: 0.1,      // Faster appearance
+      ease: "easeInOut",  // Smooth transition
+    }, }
+  };
+
+  const socialVariants = {
+    hidden: { opacity: 0, scale: 0.5 },
+    visible: { opacity: 1, scale: 0.5 }
+  };
+
+  return (
+    <motion.div style={{ y }}
+      initial="hidden"
+      whileInView="visible"
+      viewport={{ once: true, amount: 0.2 }}
+      variants={containerVariants}
+    >
+      <Box
+        component="footer"
+        sx={{
+          background: "linear-gradient(135deg, #1a237e 0%, #283593 100%)",
+          color: "white",
+          py: 6,
+          mt: "auto",
+          mb:"20px",
+          boxShadow: "0 -4px 20px rgba(0,0,0,0.2)",
+          position: "relative",
+          overflow: "hidden",
+          "&:before": {
+            content: '""',
+            position: "absolute",
+            top: 0,
+            left: 0,
+            right: 0,
+            height: "4px",
+            background: "linear-gradient(90deg, #64b5f6 0%, #42a5f5 100%)"
+          }
+        }}
+      >
+        <Container maxWidth="lg">
+          <Grid container spacing={4} justifyContent="center">
+            {/* Quick Links */}
+            <Grid size={{ xs: 12, sm: 4 }}>
+              <motion.div variants={itemVariants}>
+                <Typography variant="h6" gutterBottom sx={{
+                  fontWeight: "bold",
+                  textShadow: "0 2px 4px rgba(0,0,0,0.2)"
+                }}>
+                  Quick Links
+                </Typography>
+              </motion.div>
+              <Box display="flex" flexDirection="column">
+                {[
+                  { text: "Home", icon: <Home />, href: "/" },
+                  { text: "About", icon: <Info />, href: "/about" },
+                  { text: "Contact", icon: <ContactMail />, href: "/contact" },
+                ].map((item, index) => (
+                  <motion.div
+                    key={item.text}
+                    variants={itemVariants}
+                    custom={index}
+                    transition={{
+                      delay: index * 0.1,
+                      type: "tween",
+                      duration: 0.5
+                    }}
+                  >
+                    <Button
+                      component={motion.a}
+                      whileHover={{
+                        scale: 1.05,
+                        x: 10,
+                        color: "#64b5f6"
+                      }}
+                      whileTap={{ scale: 0.95 }}
+                      color="inherit"
+                      startIcon={item.icon}
+                      href={item.href}
+                      sx={{
+                        justifyContent: "flex-start",
+                        fontSize: "1rem",
+                        fontWeight: "500",
+                        my: 1,
+                        color: "#e0e0e0",
+                        transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)"
+                      }}
+                    >
+                      {item.text}
+                    </Button>
+                  </motion.div>
+                ))}
+              </Box>
+            </Grid>
+
+            {/* Contact Info */}
+            <Grid size={{ xs: 12, sm: 4 }}>
+              <motion.div variants={itemVariants}>
+                <Typography variant="h6" gutterBottom sx={{
+                  fontWeight: "bold",
+                  textShadow: "0 2px 4px rgba(0,0,0,0.2)"
+                }}>
+                  Contact Us
+                </Typography>
+              </motion.div>
+              {[
+                { label: "Email:", value: "contact@example.com" },
+                { label: "Phone:", value: "+1 234 567 890" },
+                { label: "Address:", value: "123 Street Name, City" },
+              ].map((item, index) => (
+                <motion.div
+                  key={index}
+                  variants={itemVariants}
+                  custom={index}
+                  transition={{ delay: index * 0.10 }}
+                >
+                  <Typography
+                    variant="body2"
+                    sx={{
+                      color: "#e0e0e0",
+                      fontSize: "1rem",
+                      mb: 1,
+                      "& strong": { color: "#64b5f6" }
+                    }}
+                  >
+                    <strong>{item.label}</strong> {item.value}
+                  </Typography>
+                </motion.div>
+              ))}
+            </Grid>
+
+            {/* Social Media */}
+            <Grid size={{ xs: 12, sm: 4 }}>
+              <motion.div variants={itemVariants}>
+                <Typography variant="h6" gutterBottom sx={{
+                  fontWeight: "bold",
+                  textShadow: "0 2px 4px rgba(0,0,0,0.2)"
+                }}>
+                  Follow Us
+                </Typography>
+              </motion.div>
+              <Box display="flex" gap={2}>
+                {[
+                  { icon: <Facebook />, href: "#" },
+                  { icon: <Twitter />, href: "#" },
+                  { icon: <Instagram />, href: "#" },
+                ].map((item, index) => (
+                  <motion.div
+                    key={index}
+                    variants={socialVariants}
+                    transition={{
+                      delay: index * 0.2,
+                      type: "spring",
+                      stiffness: 250,
+                      damping: 8
+                    }}
+                  >
+                    <IconButton
+                      component={motion.a}
+                      whileHover={{
+                        scale: 1.2,
+                        rotate: [0, -10, 10, 0],
+                        background: "rgba(100, 181, 246, 0.3)"
+                      }}
+                      whileTap={{ scale: 0.9 }}
+                      color="inherit"
+                      href={item.href}
+                      sx={{
+                        color: "white",
+                        bgcolor: "rgba(255, 255, 255, 0.1)",
+                        transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
+                        "&:hover": {
+                          bgcolor: "rgba(100, 181, 246, 0.3)",
+                          boxShadow: "0 4px 12px rgba(0,0,0,0.2)"
+                        }
+                      }}
+                    >
+                      {item.icon}
+                    </IconButton>
+                  </motion.div>
+                ))}
+              </Box>
+            </Grid>
+          </Grid>
+
+          {/* Copyright */}
+          <Box textAlign="center" pt={4} mt={3}>
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.3 }}
+            >
+              <Typography
+                variant="body2"
+                sx={{
+                  fontSize: "0.9rem",
+                  opacity: 0.8,
+                  textShadow: "0 1px 2px rgba(0,0,0,0.2)"
+                }}
+              >
+                © {new Date().getFullYear()} Your Company Name. All rights reserved.
+              </Typography>
+            </motion.div>
+          </Box>
+        </Container>
+      </Box>
+    </motion.div>
+  );
+};
+
+export default Footer;
