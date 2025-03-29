@@ -6,10 +6,12 @@ import Header from "@/components/header/Header";
 import Sidebar from "@/components/sidebar/Sidebar";
 import { Box, Container } from "@mui/material";
 <<<<<<< HEAD
+<<<<<<< HEAD
 import BottomNavigationComponent from "@/components/bottom-navigation/BottomNavigation";
 =======
+=======
 import Footer from "@/components/footer/Footer";
->>>>>>>>> Temporary merge branch 2
+>>>>>>> RAD
 
 export default function RootLayout({
   children,
