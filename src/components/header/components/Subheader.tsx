@@ -23,7 +23,7 @@ const SubHeader = () => {
   return (
     <Box
       sx={{
-        display: { xs: "none", sm: "flex", md: "flex", lg: "flex" },
+        display: { xs: "none", sm: "none", md: "flex", lg: "flex" },
         flexDirection: 'column',
         paddingLeft: "24px",
         paddingRight: "24px",

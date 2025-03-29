@@ -8,6 +8,7 @@ import {
   CardContent,
   CardMedia,
   Typography,
+  useMediaQuery,
   useTheme,
 } from "@mui/material";
 import Image from "next/image";
@@ -22,6 +23,9 @@ import BottomNavigationComponent from "@/components/bottom-navigation/BottomNavi
 export default function Home() {
 
   const { isSidebarOpen } = useSelector((state: RootState) => state.header);
+
+  const theme = useTheme()
+    const isSmallScreen = useMediaQuery(theme.breakpoints.down("md"));
   
   return (
     // <Box>
@@ -68,13 +72,13 @@ export default function Home() {
         }}
       >
         {
-          isSidebarOpen ? (
+          isSidebarOpen  ? (
             <Box
             component="aside"
             sx={{
               width: { xs: "100%", sm: "30%", md: "25%" }, // Full-width on small screens, 25% on md+
               flexShrink: 0, // Prevent sidebar from shrinking
-              display: { xs: "none", sm: "block" }, // Hide sidebar on extra-small screens
+              display: { xs: "none",sm: "none", md: "block" }, // Hide sidebar on extra-small screens
             }}
             height="495px"
           >

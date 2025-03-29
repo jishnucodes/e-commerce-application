@@ -30,7 +30,7 @@ export default function RootLayout({
             sx={{
               display: "flex",
               flexDirection: "column",
-              marginTop: { xs: "60px", sm: "200px" },
+              marginTop: { xs: "70px", sm: "70px", md: "200px" },
               paddingLeft: "24px",
               paddingRight: "24px",
               gap: { xs: 2, lg: 1 }, // Space between sidebar and content

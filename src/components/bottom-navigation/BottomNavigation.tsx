@@ -8,10 +8,14 @@ import RestoreIcon from '@mui/icons-material/Restore';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import { Paper, useTheme, useMediaQuery } from '@mui/material';
+import TopicOutlinedIcon from '@mui/icons-material/TopicOutlined';
+import HomeOutlinedIcon from '@mui/icons-material/HomeOutlined';
+import ShoppingCartOutlinedIcon from '@mui/icons-material/ShoppingCartOutlined';
+import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined';
 
 export default function BottomNavigationComponent() {
     const theme = useTheme()
-    const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
+    const isSmallScreen = useMediaQuery(theme.breakpoints.down("md"));
   const [value, setValue] = React.useState(0);
 
   return (
@@ -25,11 +29,19 @@ export default function BottomNavigationComponent() {
               onChange={(event, newValue) => {
                 setValue(newValue);
               }}
+              sx={{
+                display: 'flex',
+                flexDirection: 'row',
+                justifyContent: 'center',
+                alignItems: 'center'
+              }}
             >
-              <BottomNavigationAction label="Recents" icon={<RestoreIcon />} />
-              <BottomNavigationAction label="Favorites" icon={<FavoriteIcon />} />
-              <BottomNavigationAction label="Nearby" icon={<LocationOnIcon />} />
+              <BottomNavigationAction label="Categories" icon={<TopicOutlinedIcon />} />
+              <BottomNavigationAction label="Home" icon={<HomeOutlinedIcon />} />
+              <BottomNavigationAction label="Cart" icon={<ShoppingCartOutlinedIcon />} />
+              <BottomNavigationAction label="Account" icon={<PersonOutlineOutlinedIcon />} />
             </BottomNavigation>
+            
           </Paper>
         ) : null
     }

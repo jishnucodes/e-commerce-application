@@ -33,7 +33,7 @@ const MainInterfaceSlider: React.FC = () => {
   return (
     <Box
       sx={{
-        width: { xs: "100%", sm: isSidebarOpen ? "70%" : "100%", md: isSidebarOpen ? "75%" : "100%" },
+        width: { xs: "100%", sm: "100%", md: isSidebarOpen ? "70%" : "100%", lg: isSidebarOpen ? "75%" : "100%" },
         padding: 2,
         height: "495px",
         boxShadow: "0 4px 12px rgba(0,0,0,0.1)",

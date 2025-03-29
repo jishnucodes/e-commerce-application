@@ -18,7 +18,7 @@ const SliderComponent: React.FC = () => {
   ];
 
   return (
-    <Box sx={{ width: "100%",padding: 2, my: 4 }}>
+    <Box sx={{ width: "100%",padding: 2, mt: 4, mb: 6}}>
       <Typography variant="h4" sx={{ mb: 2, textAlign: "start" }}>
         Featured Categories
       </Typography>

@@ -33,6 +33,7 @@ import { AppDispatch, RootState } from "../../../store";
 import { toggleTheme } from "@/slices/themeSlice";
 import DropdownNavButton from "./components/DropdownNavButton";
 import SubHeader from "./components/Subheader";
+import MobileViewTabs from "../mobile-view-tabs/MobileViewTabs";
 
 const Header = () => {
   const [mobileOpen, setMobileOpen] = React.useState(false);
@@ -87,15 +88,17 @@ const Header = () => {
     },
   ];
 
-  const drawerWidth = "240px";
+  const drawerWidth = "400px";
 
   const drawer = (
     <Box onClick={handleDrawerToggle} sx={{ textAlign: "center" }}>
-      <Typography variant="h6" sx={{ my: 2 }}>
-        MUI
+      <Typography variant="h6" sx={{ my: 1 }}>
+        Main Menu
       </Typography>
-      <Divider />
-      <List sx={{ display: "flex", flexDirection: "column" }}>
+      <Typography variant="body2" sx={{mb: 1}}>
+        Select a option tab
+      </Typography>
+      {/* <List sx={{ display: "flex", flexDirection: "column" }}>
         {navItems.map((item) => (
           <React.Fragment key={item.id}>
             <ListItem sx={{}}>
@@ -133,7 +136,12 @@ const Header = () => {
             <Divider />
           </React.Fragment>
         ))}
-      </List>
+      </List> */}
+      <Box>
+        <Box>
+          <MobileViewTabs />
+        </Box>
+      </Box>
     </Box>
   );
 
@@ -155,7 +163,7 @@ const Header = () => {
             sx={{
               height: "40px",
               minHeight: { xs: "40px", sm: "40px" },
-              justifyContent: {sm: 'center', md: 'space-between'}
+              justifyContent: {sm: 'space-between', md: 'space-between'}
             }}
           >
             <IconButton
@@ -163,18 +171,18 @@ const Header = () => {
               aria-label="open drawer"
               edge="start"
               onClick={handleDrawerToggle}
-              sx={{ mr: 2, display: { sm: "none" } }}
+              sx={{ mr: 2, display: { md: "none" } }}
             >
               <MenuIcon />
             </IconButton>
             <Typography
               variant="h6"
               component="div"
-              sx={{ flexGrow: 1, display: { xs: "none", sm: "block" }, fontSize: {sm: '12px', md:'16px'} }}
+              sx={{ flexGrow: 1, display: { xs: "none", sm: "none",  md: "block" }, fontSize: {md: '12px', lg:'16px'} }}
             >
               Welcome To Carrefour Store
             </Typography>
-            <Box sx={{ display: { xs: "none", sm: "block" } }}>
+            <Box sx={{ display: { xs: "none", sm: "none", md: "block" } }}>
               {navItems.map((item) => (
                 <React.Fragment key={item.id}>
                   {item.id === navItems[2].id ? (
@@ -225,6 +233,7 @@ const Header = () => {
           </Container>
         <nav>
           <Drawer
+            anchor="right"
             variant="temporary"
             open={mobileOpen}
             onClose={handleDrawerToggle}
@@ -232,10 +241,12 @@ const Header = () => {
               keepMounted: true, // Better open performance on mobile.
             }}
             sx={{
-              display: { xs: "block", sm: "none" },
+              display: { xs: "block", sm: "block", md: "none" },
               "& .MuiDrawer-paper": {
                 boxSizing: "border-box",
-                width: drawerWidth,
+                maxWidth: drawerWidth,
+                width: "100%",
+                background: "white"
               },
             }}
           >
