@@ -17,8 +17,8 @@ import MainInterfaceSlider from "@/components/slider/MainInterfaceSlider";
 import Sidebar from "@/components/sidebar/Sidebar";
 import FeaturesList from "@/components/features-list/FeaturesList";
 import { useSelector } from "react-redux";
-import { RootState } from "../../store";
 import BottomNavigationComponent from "@/components/bottom-navigation/BottomNavigation";
+import { RootState } from "../../../store";
 
 export default function Home() {
 
@@ -28,34 +28,7 @@ export default function Home() {
     const isSmallScreen = useMediaQuery(theme.breakpoints.down("md"));
   
   return (
-    // <Box>
-    //    <Card sx={{ maxWidth: "600px",width: "100%"}}>
-    //   {/* <CardMedia
-    //     sx={{ height: 340 }}
-    //     image="/laptopImage.jpg"
-    //     title="green iguana"
-    //   /> */}
-    //   <Image
-    //     src="/laptopImage.jpg"
-    //     alt="slide-image"
-    //     width={500}
-    //     height={140}
-    //   />
-    //   <CardContent>
-    //     <Typography gutterBottom variant="h5" component="div">
-    //       Lizard
-    //     </Typography>
-    //     <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-    //       Lizards are a widespread group of squamate reptiles, with over 6,000
-    //       species, ranging across all continents except Antarctica
-    //     </Typography>
-    //   </CardContent>
-    //   <CardActions>
-    //     <Button size="small">Share</Button>
-    //     <Button size="small">Learn More</Button>
-    //   </CardActions>
-    // </Card>
-    // </Box>
+    
     <Box
       sx={{
         // width: "100%"
