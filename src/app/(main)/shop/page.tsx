@@ -1,11 +1,17 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import ProductDisplaySection from "@/components/shop-page/product-display-section/ProductDisplaySection";
 import { Box, Card, CardActionArea, CardMedia } from "@mui/material";
 import CategoriesSidebar from "@/components/shop-page/categories-sidebar/CategoriesSidebar";
 
+
+
+
+
 const page = () => {
+
+
   return (
     <Box
       component="div"
@@ -47,6 +53,7 @@ const page = () => {
                 borderRadius: "18px",
               }}
             />
+          
           </CardActionArea>
         </Card>
         <ProductDisplaySection />
