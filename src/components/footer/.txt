@@ -230,3 +230,6 @@ const Footer = () => {
 };
 
 export default Footer;
+
+
+ #1a237e, #d81b60'

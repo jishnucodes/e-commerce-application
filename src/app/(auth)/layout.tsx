@@ -21,11 +21,8 @@ export default function AuthLayout({
         <StoreProvider>
           {/* No header/footer here */}
           <Box sx={{ 
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-            minHeight: '100vh',
-            p: 2
+            width:"100%",
+            overflow:"hidden"
           }}>
             {children}
           </Box>
