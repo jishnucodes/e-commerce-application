@@ -15,9 +15,8 @@ import {
 } from "@mui/material";
 import Grid from "@mui/material/Grid2";
 import FilterAltOutlinedIcon from "@mui/icons-material/FilterAltOutlined";
-import LocalShippingOutlinedIcon from "@mui/icons-material/LocalShippingOutlined";
-import AttachMoneyOutlinedIcon from "@mui/icons-material/AttachMoneyOutlined";
 import MobileDrawableFilterComponent from "../mobile-filtering/MobileDrawableFilterComponent";
+import AnimatedCardComponent from "./AnimatedCardComponent";
 
 const menuItemValues = [
   "alphabetic",
@@ -207,10 +206,10 @@ const ProductDisplaySection = () => {
         </Box>
       </Box>
       {/* product-card displaying */}
-      <Box component="div">
-        <Grid container spacing={2}>
-        <Grid size={{ sm: 6, md: 4, lg: 3 }}>
-            <Card sx={{ width: "100%" }}>
+      <Box component="div" sx={{overflow: 'hidden'}}>
+        <Grid container spacing={2} >
+        <Grid size={{ sm: 6, md: 4, lg: 4 }}>
+            {/* <Card sx={{ width: "100%" }}>
               <CardMedia
                 sx={{ height: 140 }}
                 image="/static/images/cards/contemplative-reptile.jpg"
@@ -280,10 +279,11 @@ const ProductDisplaySection = () => {
                   </Typography>
                 </Box>
               </CardActions>
-            </Card>
+            </Card> */}
+            <AnimatedCardComponent />
           </Grid>
-          <Grid size={{ sm: 6, md: 4, lg: 3 }}>
-            <Card sx={{ width: "100%" }}>
+          <Grid size={{ sm: 6, md: 4, lg: 4 }}>
+            {/* <Card sx={{ width: "100%" }}>
               <CardMedia
                 sx={{ height: 140 }}
                 image="/static/images/cards/contemplative-reptile.jpg"
@@ -353,10 +353,11 @@ const ProductDisplaySection = () => {
                   </Typography>
                 </Box>
               </CardActions>
-            </Card>
+            </Card> */}
+            <AnimatedCardComponent />
           </Grid>
-          <Grid size={{ sm: 6, md: 4, lg: 3 }}>
-            <Card sx={{ width: "100%" }}>
+          <Grid size={{ sm: 6, md: 4, lg: 4 }}>
+            {/* <Card sx={{ width: "100%" }}>
               <CardMedia
                 sx={{ height: 140 }}
                 image="/static/images/cards/contemplative-reptile.jpg"
@@ -426,10 +427,11 @@ const ProductDisplaySection = () => {
                   </Typography>
                 </Box>
               </CardActions>
-            </Card>
+            </Card> */}
+            <AnimatedCardComponent />
           </Grid>
-          <Grid size={{ sm: 6, md: 4, lg: 3 }}>
-            <Card sx={{ width: "100%" }}>
+          <Grid size={{ sm: 6, md: 4, lg: 4 }}>
+            {/* <Card sx={{ width: "100%" }}>
               <CardMedia
                 sx={{ height: 140 }}
                 image="/static/images/cards/contemplative-reptile.jpg"
@@ -499,10 +501,11 @@ const ProductDisplaySection = () => {
                   </Typography>
                 </Box>
               </CardActions>
-            </Card>
+            </Card> */}
+            <AnimatedCardComponent />
           </Grid>
-          <Grid size={{ sm: 6, md: 4, lg: 3 }}>
-            <Card sx={{ width: "100%" }}>
+          <Grid size={{ sm: 6, md: 4, lg: 4 }}>
+            {/* <Card sx={{ width: "100%" }}>
               <CardMedia
                 sx={{ height: 140 }}
                 image="/static/images/cards/contemplative-reptile.jpg"
@@ -572,10 +575,11 @@ const ProductDisplaySection = () => {
                   </Typography>
                 </Box>
               </CardActions>
-            </Card>
+            </Card> */}
+            <AnimatedCardComponent />
           </Grid>
-          <Grid size={{ sm: 6, md: 4, lg: 3 }}>
-            <Card sx={{ width: "100%" }}>
+          <Grid size={{ sm: 6, md: 4, lg: 4 }}>
+            {/* <Card sx={{ width: "100%" }}>
               <CardMedia
                 sx={{ height: 140 }}
                 image="/static/images/cards/contemplative-reptile.jpg"
@@ -645,7 +649,8 @@ const ProductDisplaySection = () => {
                   </Typography>
                 </Box>
               </CardActions>
-            </Card>
+            </Card> */}
+            <AnimatedCardComponent />
           </Grid>
         </Grid>
       </Box>
