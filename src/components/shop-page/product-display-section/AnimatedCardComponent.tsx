@@ -10,6 +10,8 @@ import {
   Typography,
   IconButton,
   Rating,
+  useTheme,
+  useMediaQuery,
 } from "@mui/material";
 import { motion } from "framer-motion";
 import { styled } from "@mui/system";
@@ -73,6 +75,8 @@ const AnimatedButton = styled(motion.button)({
 
 export default function AnimatedCardComponent() {
     const [value, setValue] = React.useState<number | null>(2);
+    const theme = useTheme();
+    const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"))
   return (
     <AnimatedCard whileHover={{ rotateY: 15, rotateX: 15 }}>
       <GlassCard>
@@ -97,7 +101,7 @@ export default function AnimatedCardComponent() {
           >
             <Image
               src="/adv-5.jpg" // Ensure this image is inside the "public" folder
-              width={500}
+              width={isSmallScreen ? 250 : 500}
               height={300}
               alt="backpack"
               style={{ width: "100%", height: "100%", objectFit: "cover" }} // Fit image inside container

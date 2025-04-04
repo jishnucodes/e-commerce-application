@@ -6,10 +6,10 @@ import Slider from './components/Slider';
 
 const Innercontent = () => {
   return (
-    <div>
+    <React.Fragment>
         <Sidebar />
         <Slider />
-    </div>
+    </React.Fragment>
   )
 }
 
