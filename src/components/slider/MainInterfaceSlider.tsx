@@ -137,17 +137,17 @@ const MainInterfaceSlider: React.FC = () => {
                       gutterBottom
                       variant="h5"
                       sx={{
-                        fontFamily: "'Poppins', sans-serif",
+                        color:"#0118D8", 
+                        fontFamily: "Copeland",
                         fontWeight: 700,
                         background: 'linear-gradient(45deg, #2b5876 0%, #4e4376 100%)',
                         WebkitBackgroundClip: 'text',
-                        WebkitTextFillColor: 'transparent',
+                        // WebkitTextFillColor: 'transparent',
                         fontSize: {
                           xs: '1.4rem',   // Mobile
                           sm: '1.5rem',  // Tablet
                           md: '3rem'      // Desktop
                         },
-                        lineHeight:"19px",
                         textShadow: '0 2px 4px rgba(26, 14, 14, 0.1)',
                         position: 'relative',
                         display: 'inline-block',
@@ -187,12 +187,13 @@ const MainInterfaceSlider: React.FC = () => {
                       variants={textVariants}
                       variant="body2"
                       sx={{
-                        color: 'text.secondary',
+                        color: '#3f3d3d',
                         fontSize: {
                           xs: '0.800rem',  // Mobile
                           sm: '1rem',       // Tablet
                           md: '1.4rem'      // Desktop
                         },
+                        fontFamily:"Garmit-Light",
                         lineHeight: {
                           xs: 1.2,
                           sm: 1.4,
@@ -232,6 +233,7 @@ const MainInterfaceSlider: React.FC = () => {
                         cursor: 'pointer',
                         textTransform: 'uppercase',
                         fontWeight: 'bold',
+                        fontFamily:"CaviarDreams_Bold",
                         transition: 'all 0.3s ease',
                         display: 'inline-block',
                         width: { xs: "90%", sm: "auto" }, // Full width on mobile

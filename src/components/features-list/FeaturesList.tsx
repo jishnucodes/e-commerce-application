@@ -88,10 +88,10 @@ const FeaturesList = () => {
     >
       {feature.icon}
       <Box>
-        <Typography variant="h6" sx={{ fontWeight: 700 }}>
+        <Typography variant="h6" sx={{ fontWeight: 700 ,fontFamily: "CaviarDreams_Bold"}}>
           {feature.primaryText}
         </Typography>
-        <Typography variant="body2" sx={{ color: "text.secondary" }}>
+        <Typography variant="body2" sx={{ color: "text.secondary" , fontFamily: "Garmit-Light" }}>
           {feature.secondaryText}
         </Typography>
       </Box>

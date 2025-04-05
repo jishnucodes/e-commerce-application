@@ -28,13 +28,13 @@ const Sidebar = () => {
               <ListItem
                 key={category.id}
                 sx={{
-                  fontFamily: "Roboto, sans-serif",
+                  fontFamily: "CaviarDreams_Bold",
                 }}
               >
                 <ListItemText
                   primary={category.name}
                   sx={{
-                    fontFamily: "Roboto, sans-serif",
+                    fontFamily: "CaviarDreams_Bold",
                     "&:hover": {
                       cursor: "pointer",
                     },

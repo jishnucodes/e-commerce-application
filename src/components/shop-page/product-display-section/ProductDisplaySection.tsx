@@ -81,6 +81,8 @@ const ProductDisplaySection = () => {
             alignItems: "center",
             padding: "10px",
             gap: 1,
+            fontFamily:"CaviarDreams_Bold"
+
           }}
         >
           <Box component="div">

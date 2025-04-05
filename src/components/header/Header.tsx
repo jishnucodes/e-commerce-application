@@ -178,7 +178,7 @@ const Header = () => {
             <Typography
               variant="h6"
               component="div"
-              sx={{ flexGrow: 1, display: { xs: "none", sm: "none",  md: "block" }, fontSize: {md: '12px', lg:'16px'} }}
+              sx={{ flexGrow: 1,fontFamily:"CaviarDreams_Bold", display: { xs: "none", sm: "none",  md: "block" }, fontSize: {md: '20px', lg:'20px'} }}
             >
               Welcome To Carrefour Store
             </Typography>
@@ -210,6 +210,7 @@ const Header = () => {
                           toggleTheme(themeMode == "dark" ? "light" : "dark")
                         )
                       }
+                      
                     >
                       {item.id !== navItems[2].id && item.icon
                         ? Array.isArray(item.icon)

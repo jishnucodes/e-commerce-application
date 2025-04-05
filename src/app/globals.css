@@ -3,7 +3,44 @@
 @import 'swiper/css/pagination';
 @import 'swiper/css/navigation';
 
+ /* mainly used to standout the main headings*/
+@font-face {
+    font-family: 'Copeland';
+    src: url('/fonts/Copeland.otf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+  }
+  /* NAVFONTS */
+@font-face {
+    font-family: 'CaviarDreams_Bold';
+    src: url('/fonts/CaviarDreams_Bold.ttf') format('truetype'); 
+    font-weight: normal;
+    font-style: normal;
+  }
+    /* mainly used to display the features list */
+@font-face {
+    font-family: 'Garmit-Light';
+    src: url('/fonts/Garmit-Light.otf') format('truetype'); 
+    font-weight: normal;
+    font-style: normal;
+  }
 
+   /* used to display the text over the product */
+@font-face {
+    font-family: 'MIXONE';
+    src: url('/fonts/MIXONE.ttf') format('truetype'); 
+    font-weight: normal;
+    font-style: normal;
+  }
+
+    /* used to display the logo */
+@font-face {
+    font-family: 'Movie Font';
+    src: url('/fonts/Movie Font.ttf') format('truetype'); 
+    font-weight: normal;
+    font-style: normal;
+  }
+  
 
 /* Global Reset */
 body {
@@ -15,14 +52,14 @@ body {
 
 /* Light Theme Variables */
 [data-theme="light"] {
-    --bg-color: #ffffff;
-    --text-color: #121212;
+    --bg-color: #fff5f5;
+    --text-color: #3e3c3c;
 }
 
 /* Dark Theme Variables */
 [data-theme="dark"] {
-    --bg-color: #121212;
-    --text-color: #f5f5f5;
+    --bg-color: #16151e;
+    --text-color: #c3c1c1;
 }
 
 /* Apply the variables */

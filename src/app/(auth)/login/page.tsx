@@ -36,7 +36,8 @@ const LoginPage = () => {
         <Typography
           variant="h3"
           sx={{
-            fontWeight: 700,
+            fontWeight: 800,
+            fontFamily:"Copeland",
             textAlign: "center",
             background: "linear-gradient(45deg,rgb(19, 78, 207), #FE6B8B)",
             WebkitBackgroundClip: "text",
@@ -84,6 +85,7 @@ const LoginPage = () => {
             variant="h4"
             sx={{
               fontWeight: 700,
+               fontFamily:"Copeland",
               background: "linear-gradient(45deg, #1a237e, #d81b60)",
               WebkitBackgroundClip: "text",
               WebkitTextFillColor: "transparent",
@@ -197,6 +199,7 @@ const LoginPage = () => {
                     background: "linear-gradient(45deg,  #1a237e, #d81b60)",
                     color: "white",
                     fontWeight: "bold",
+                    fontFamily:"CaviarDreams_Bold",
                     textTransform: "uppercase",
                     "&:hover": {
                       transform: "translateY(-2px)",
@@ -211,7 +214,7 @@ const LoginPage = () => {
 
               {/* Toggle Between Login & Sign In */}
               <Grid size={{ xs: 12 }} sx={{ textAlign: "center" }}>
-                <Typography variant="body2" sx={{ mt: 2 }}>
+                <Typography variant="body2" sx={{ mt: 2 ,fontFamily:"Garmit-Light" }}>
                   {isLogin ? "Don't have an account?" : "Already have an account?"}{" "}
                   <Link
                     href="#"

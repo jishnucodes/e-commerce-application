@@ -61,7 +61,7 @@ const SubHeader = () => {
             variant="body1"
             sx={{
               fontSize: "30px",
-              fontFamily: "Poppins",
+              fontFamily: "Movie Font",
               letterSpacing: "1px",
               fontWeight: "bold",
               color: "blueViolet",

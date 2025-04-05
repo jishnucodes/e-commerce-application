@@ -233,3 +233,110 @@ export default Footer;
 
 
  #1a237e, #d81b60'
+
+ "use client";
+
+import { Card, CardContent, Button, Box, Typography, IconButton } from "@mui/material";
+import { motion } from "framer-motion";
+import { styled } from "@mui/system";
+import TwitterIcon from "@mui/icons-material/Twitter";
+import InstagramIcon from "@mui/icons-material/Instagram";
+import FacebookIcon from "@mui/icons-material/Facebook";
+
+const AnimatedCard = styled(motion.div)({
+  width: 290,
+  height: 300,
+  perspective: "1000px",
+  display: "flex",
+  justifyContent: "center",
+  alignItems: "center",
+});
+
+const GlassCard = styled(Card)({
+  width: "100%",
+  height: "100%",
+  borderRadius: 50,
+  background: "linear-gradient(135deg, rgb(0, 255, 214) 0%, rgb(8, 226, 96) 100%)",
+  boxShadow: "rgba(5, 71, 17, 0.2) 0px 25px 25px -5px",
+  overflow: "hidden",
+  position: "relative",
+  transition: "transform 0.5s ease-in-out",
+});
+
+const GlassOverlay = styled(Box)({
+  position: "absolute",
+  inset: 8,
+  borderRadius: "55px",
+  borderTopRightRadius: "100%",
+  background: "rgba(255, 255, 255, 0.3)",
+  backdropFilter: "blur(8px)",
+  zIndex: 2,
+});
+
+const AnimatedButton = styled(motion.button)({
+  background: "white",
+  borderRadius: "50%",
+  padding: "10px",
+  border: "none",
+  cursor: "pointer",
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "center",
+  transition: "background 0.3s ease",
+  "&:hover": {
+    background: "black",
+    "& svg": {
+      color: "white",
+    },
+  },
+});
+
+export default function AnimatedCardComponent() {
+  return (
+    <AnimatedCard whileHover={{ rotateY: 15, rotateX: 15 }}>
+      <GlassCard>
+        <GlassOverlay />
+        <CardContent sx={{ position: "relative", zIndex: 3, padding: "80px 30px 20px 30px" }}>
+          <Typography variant="h6" fontWeight="bold" color="#00894d">
+            UIVERSE (3D UI)
+          </Typography>
+          <Typography variant="body2" color="rgba(0, 137, 78, 0.8)" sx={{ marginTop: "10px" }}>
+            Create, share, and use beautiful custom elements made with CSS
+          </Typography>
+        </CardContent>
+
+        {/* Social Buttons */}
+        <Box
+          display="flex"
+          justifyContent="space-between"
+          alignItems="center"
+          sx={{ position: "absolute", bottom: 20, left: 20, right: 20 }}
+        >
+          <Box display="flex" gap={1}>
+            <motion.div whileHover={{ y: -5 }} whileTap={{ scale: 0.9 }}>
+              <AnimatedButton>
+                <TwitterIcon sx={{ color: "#00894d" }} />
+              </AnimatedButton>
+            </motion.div>
+            <motion.div whileHover={{ y: -5 }} whileTap={{ scale: 0.9 }}>
+              <AnimatedButton>
+                <InstagramIcon sx={{ color: "#00894d" }} />
+              </AnimatedButton>
+            </motion.div>
+            <motion.div whileHover={{ y: -5 }} whileTap={{ scale: 0.9 }}>
+              <AnimatedButton>
+                <FacebookIcon sx={{ color: "#00894d" }} />
+              </AnimatedButton>
+            </motion.div>
+          </Box>
+
+          <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}>
+            <Button variant="text" sx={{ color: "#00c37b", fontWeight: "bold" }}>
+              View More
+            </Button>
+          </motion.div>
+        </Box>
+      </GlassCard>
+    </AnimatedCard>
+  );
+}

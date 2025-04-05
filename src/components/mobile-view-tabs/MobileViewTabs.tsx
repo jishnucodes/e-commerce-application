@@ -26,7 +26,8 @@ const TabPanel: React.FC<TabPanelProps> = ({ children, value, index }) => {
                 justifyContent: "start",
                 padding: "8px",
                 height: "500px",
-                overflow: "auto"
+                overflow: "auto",
+                fontFamily:"CaviarDreams_Bold"
 
             }}
         >

@@ -16,7 +16,6 @@ const Footer = () => {
         mb:"10px",
         borderTop: "1px solid",
         borderColor: "divider",
-        fontFamily: "Arial, sans-serif", // Custom font
       }}
     >
       <Container maxWidth="lg">
@@ -41,6 +40,7 @@ const Footer = () => {
                     justifyContent: "flex-start",
                     fontSize: "1rem",
                     fontWeight: "500",
+                    fontFamily:"CaviarDreams_Bold",
                     my: 0.5,
                     color: "#e0e0e0",
                     "&:hover": { color: "white", transform: "scale(1.05)" },
@@ -55,7 +55,7 @@ const Footer = () => {
 
           {/* Contact Info */}
           <Grid size={{ xs: 12, sm: 4 }}>
-            <Typography variant="h6" gutterBottom sx={{ fontWeight: "bold" }}>
+            <Typography variant="h6" gutterBottom sx={{ fontWeight: "bold",fontFamily:"Garmit-Light" }}>
               Contact Us
             </Typography>
             {[
@@ -66,7 +66,7 @@ const Footer = () => {
               <Typography
                 key={index}
                 variant="body2"
-                sx={{ color: "#e0e0e0", fontSize: "1rem", mb: 0.5 }}
+                sx={{ color: "#e0e0e0", fontSize: "1rem", mb: 0.5 ,fontFamily:"CaviarDreams_Bold"}}
               >
                 <strong>{item.label}</strong> {item.value}
               </Typography>
@@ -75,7 +75,7 @@ const Footer = () => {
 
           {/* Social Media */}
           <Grid size={{ xs: 12, sm: 4 }}>
-            <Typography variant="h6" gutterBottom sx={{ fontWeight: "bold" }}>
+            <Typography variant="h6" gutterBottom sx={{ fontWeight: "bold", fontFamily:"Garmit-Light"}}>
               Follow Us
             </Typography>
             <Box display="flex" gap={2}>
@@ -90,6 +90,7 @@ const Footer = () => {
                   href={item.href}
                   sx={{
                     color: "white",
+                    fontFamily:"CaviarDreams_Bold",
                     bgcolor: "rgba(255, 255, 255, 0.1)",
                     "&:hover": { bgcolor: "rgba(255, 255, 255, 0.3)", transform: "scale(1.2)" },
                     transition: "all 0.3s ease-in-out",
@@ -104,7 +105,7 @@ const Footer = () => {
 
         {/* Copyright */}
         <Box textAlign="center" pt={4} mt={3}>
-          <Typography variant="body2" sx={{ fontSize: "0.9rem", opacity: 0.8 }}>
+          <Typography variant="body2" sx={{ fontSize: "0.9rem", opacity: 0.8,fontFamily:"CaviarDreams_Bold" }}>
             © {new Date().getFullYear()} Your Company Name. All rights reserved.
           </Typography>
         </Box>

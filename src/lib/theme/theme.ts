@@ -14,19 +14,23 @@ const lightTheme:ThemeOptions  = createTheme({
       main: "#dc004e",
     },
     background: {
-      default: "#ffffff",
+      default: "#fff5f5",
       paper: "#f4f6f8",
+    },
+    text: {
+      primary: "#0118D8",
+      secondary: "#3f3d3d",
     },
   },
   typography: {
-    fontFamily: "Roboto, sans-serif",
+    fontFamily: "CaviarDreams_Bold ,Garmit-Light",
     
   },
   mainFontStyles: {
     fontFamily: "Arial, sans-serif", // ✅ Now properly recognized
   },
   navFontStyles: {
-    fontFamily: "Poppins",
+    fontFamily: "CaviarDreams_Bold",
     fontSize: "12px",
     textTransform: "capitalize",
     [createTheme().breakpoints.up("sm")] : {
@@ -49,22 +53,22 @@ const darkTheme:ThemeOptions = createTheme({
       main: "#f48fb1",
     },
     background: {
-      default: "#121212",
+      default: "#16151e",
       paper: "#1e1e1e",
     },
     text: {
-      primary: "#e0f2f1",
-      secondary: "#f5f5f5",
+      primary: "#253bfe",
+      secondary: "#adadad",
     },
   },
   typography: {
-    fontFamily: "Roboto, sans-serif",
+    fontFamily: "CaviarDreams_Bold ,Garmit-Light" ,
   },
   mainFontStyles: {
     fontFamily: "Poppins", 
   },
   navFontStyles: {
-    fontFamily: "Poppins",
+    fontFamily: "CaviarDreams_Bold",
     fontSize: "12px",
     textTransform: "capitalize",
     [createTheme().breakpoints.up("sm")] : {

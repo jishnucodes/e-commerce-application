@@ -24,7 +24,7 @@ const SliderComponent: React.FC = () => {
         sx={{
           mb: 2,
           textAlign: { xs: "center", sm: "start" },
-          fontFamily: "'Poppins', sans-serif",
+          fontFamily: "Copeland",
           fontWeight: 700,
           letterSpacing: { xs: '0.5px', md: '1px' },
           fontSize: {
@@ -84,17 +84,33 @@ const SliderComponent: React.FC = () => {
               <Typography
                 variant="h5"
                 sx={{
-                  fontWeight: "bold",
-                  textAlign: "center",
-                  overflow:"hidden",
-                 background: "linear-gradient(90deg,rgb(2, 49, 255),rgb(5, 255, 89))",
-                  WebkitBackgroundClip: "text",
-                  WebkitTextFillColor: "transparent",
-                  textShadow: "2px 2px 10px rgba(0, 0, 0, 0.2)",
-                  transition: "transform 0.3s ease-in-out",
-                  "&:hover": {
-                    transform: "scale(1.1)",
-                  },
+                  
+                    fontWeight: "bold",
+                    fontFamily: "MIXONE",
+                    textAlign: "center",
+                    overflow: "hidden",
+                    background: "linear-gradient(90deg, #000, #000)",
+                    WebkitBackgroundClip: "text",
+                    WebkitTextFillColor: "transparent",
+                    
+                    // Text Border Effect
+                    WebkitTextStroke: "1px rgb(255, 30, 0)", // Main border (Webkit browsers)
+                    textStroke: "1px #dad8d8", // Standard property (if supported)
+                    
+                    // Enhanced border with shadows
+                    textShadow: `
+                      2px 2px 4px rgba(250, 229, 229, 0.2),
+                      -1px -1px 0 #dad8d8,
+                      1px -1px 0 #dad8d8,
+                      -1px 1px 0 #dad8d8,
+                      1px 1px 0 #dad8d8
+                    `,
+                    
+                    transition: "transform 0.3s ease-in-out",
+                    "&:hover": {
+                      transform: "scale(1.1)",
+                    },
+                
                   fontSize: {
                     xs: "1.9rem", // Small screens
                     sm: "2.2rem",   // Tablets
