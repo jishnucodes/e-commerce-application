@@ -78,26 +78,13 @@ const CategoriesSidebar = () => {
             <ListItem
               key={category.id}
               sx={{
-                fontFamily: "Roboto, sans-serif",
+                fontFamily: "CaviarDreams_Bold",
               }}
             >
               <ListItemText
                 primary={category.name}
                 sx={{
-<<<<<<< HEAD
                   fontFamily: "CaviarDreams_Bold",
-                }}
-              >
-                <ListItemText
-                  primary={category.name}
-                  sx={{
-                    fontFamily: "Garmit-Light",
-                    "&:hover": {
-                      cursor: "pointer",
-                    },
-                  }}
-=======
-                  fontFamily: "Roboto, sans-serif",
                   "&:hover": {
                     cursor: "pointer",
                   },
@@ -177,7 +164,6 @@ const CategoriesSidebar = () => {
                   valueLabelDisplay="auto"
                   min={0}
                   max={7000}
->>>>>>> origin/jp
                 />
               </Box>
               <Box
