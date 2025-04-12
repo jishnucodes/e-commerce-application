@@ -14,6 +14,7 @@ import {
   Typography,
   useMediaQuery,
   useTheme,
+  Chip,
 } from "@mui/material";
 import Grid from "@mui/material/Grid2";
 import FilterAltOutlinedIcon from "@mui/icons-material/FilterAltOutlined";
@@ -23,7 +24,7 @@ import MobileProductDisplayComponent from "./MobileProductDisplayComponent";
 import LocalShippingOutlinedIcon from "@mui/icons-material/LocalShippingOutlined";
 import AttachMoneyOutlinedIcon from "@mui/icons-material/AttachMoneyOutlined";
 import ProductImageZoom from "@/components/product-image-zoom/ProductImageZoom";
-
+import Image from "next/image";
 const menuItemValues = [
   "alphabetic",
   "price: low to high",
@@ -40,6 +41,66 @@ const stars = [
     id: 2,
     emptyStar: " &#9734;",
   },
+];
+
+const products = [
+  {
+    name: "Plant Stand",
+    price: "₹3,013",
+    oldPrice: "₹4,999",
+    image: "/backpacks.jpg",
+    tag: "Free delivery",
+  },
+  {
+    name: "Metal Shelf",
+    price: "₹2,697",
+    oldPrice: "₹3,499",
+    image: "/backpacks.jpg",
+    tag: "Buy 2, save more",
+  },
+  {
+    name: "Potted Stand",
+    price: "₹1,159",
+    oldPrice: "₹4,999",
+    image: "/backpacks.jpg",
+    tag: "Hot Deal",
+  },
+  {
+    name: "Potted Stand",
+    price: "₹1,159",
+    oldPrice: "₹4,999",
+    image: "/backpacks.jpg",
+    tag: "Hot Deal",
+  },
+  {
+    name: "Plant Stand",
+    price: "₹3,013",
+    oldPrice: "₹4,999",
+    image: "/backpacks.jpg",
+    tag: "Free delivery",
+  },
+  {
+    name: "Metal Shelf",
+    price: "₹2,697",
+    oldPrice: "₹3,499",
+    image: "/backpacks.jpg",
+    tag: "Buy 2, save more",
+  },
+  {
+    name: "Potted Stand",
+    price: "₹1,159",
+    oldPrice: "₹4,999",
+    image: "/backpacks.jpg",
+    tag: "Hot Deal",
+  },
+  {
+    name: "Potted Stand",
+    price: "₹1,159",
+    oldPrice: "₹4,999",
+    image: "/backpacks.jpg",
+    tag: "Hot Deal",
+  }
+  
 ];
 
 const ProductDisplaySection = () => {
@@ -225,458 +286,117 @@ const ProductDisplaySection = () => {
             display: 'flex',
             justifyContent: 'start',
             alignItems: 'center',
-            width: '100%'
-  
+            width: '100%',
+            mt: 2
           }}
         >
-          <Grid container spacing={2} >
-          <Grid size={{ sm: 6, md: 4, lg: 3 }}>
-              <Card sx={{ width: "100%" }}>
-                <CardMedia
-                  sx={{ height: 140 }}
-                  image="/static/images/cards/contemplative-reptile.jpg"
-                  title="green iguana"
+          <Grid container spacing={3} sx={{ p: 2 }}>
+        {products.map((item, index) => (
+          <Grid size={{ xs: 6, sm: 6, md: 4, lg: 3 }} key={index}>
+            <Card 
+              sx={{ 
+                height: '100%', 
+                display: 'flex', 
+                flexDirection: 'column',
+                borderRadius: 2,
+                boxShadow: '0 4px 8px rgba(0,0,0,0.1)',
+                transition: 'transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out',
+                '&:hover': {
+                  transform: 'translateY(-5px)',
+                  boxShadow: '0 8px 16px rgba(0,0,0,0.2)',
+                }
+              }}
+            >
+              <Box 
+                sx={{ 
+                  position: 'relative', 
+                  paddingTop: '100%', 
+                  width: '100%',
+                  overflow: 'hidden'
+                }}
+              >
+                <Image 
+                  src={item.image} 
+                  alt={item.name} 
+                  fill
+                  style={{ 
+                    objectFit: 'cover',
+                    transition: 'transform 0.3s ease-in-out'
+                  }}
+                  onMouseOver={(e) => {
+                    e.currentTarget.style.transform = 'scale(1.05)';
+                  }}
+                  onMouseOut={(e) => {
+                    e.currentTarget.style.transform = 'scale(1)';
+                  }}
                 />
-                <CardContent>
-                  {renderStars(rating)}
-                  <Typography gutterBottom variant="h5" component="div">
-                    Lizard
-                  </Typography>
-                  <Typography
-                    variant="body2"
-                    sx={{
-                      color: "text.secondary",
-                      display: "-webkit-box",
-                      WebkitBoxOrient: "vertical",
-                      WebkitLineClamp: 2, // Limit to 2 lines
-                      overflow: "hidden",
-                      textOverflow: "ellipsis",
-                      maxWidth: "100%", // Adjust width as needed
-                    }}
-                  >
-                    Lizards are a widespread group of squamate reptiles, with over
-                    6,000 species, ranging across all continents except
-                    Antarctica. They are highly adaptable and found in various
-                    environments.
-                  </Typography>
-                </CardContent>
-                <CardActions
-                  sx={{
-                    display: "flex",
-                    flexDirection: "row",
-                    justifyContent: "space-between",
-                    alignItems: "center",
+              </Box>
+              <CardContent sx={{ flexGrow: 1, p: 2 }}>
+                <Typography 
+                  variant="h6" 
+                  component="div" 
+                  sx={{ 
+                    fontWeight: 'bold',
+                    fontSize: { xs: '1rem', sm: '1.1rem' },
+                    mb: 1,
+                    overflow: 'hidden',
+                    textOverflow: 'ellipsis',
+                    display: '-webkit-box',
+                    WebkitLineClamp: 2,
+                    WebkitBoxOrient: 'vertical'
                   }}
                 >
-                  <Box
-                    sx={{
-                      display: 'flex',
-                      flexDirection: 'row',
-                      justifyContent: 'start',
-                      alignItems: 'center',
-                      gap: 1
+                  {item.name}
+                </Typography>
+                <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
+                  <Typography 
+                    variant="h6" 
+                    color="primary" 
+                    sx={{ 
+                      fontWeight: 'bold',
+                      fontSize: { xs: '1rem', sm: '1.1rem' }
                     }}
                   >
-                      <span>
-                        <LocalShippingOutlinedIcon />
-                      </span>
-                    <Typography variant="body2" sx={{color: '#1976d2'}}>
-                      Fast Delivery
-                    </Typography>
-                  </Box>
-                  <Box
-                    sx={{
-                      display: 'flex',
-                      flexDirection: 'row',
-                      justifyContent: 'start',
-                      alignItems: 'center',
-                      gap: 1
+                    {item.price}
+                  </Typography>
+                  <Typography 
+                    variant="body2" 
+                    sx={{ 
+                      textDecoration: 'line-through', 
+                      color: 'text.secondary',
+                      ml: 1,
+                      fontSize: { xs: '0.8rem', sm: '0.9rem' }
                     }}
                   >
-                      <span>
-                      <AttachMoneyOutlinedIcon />
-                      </span>
-                    <Typography variant="body2" sx={{color: '#1976d2'}}>
-                      Fast Delivery
-                    </Typography>
-                  </Box>
-                </CardActions>
-              </Card>
-              {/* <AnimatedCardComponent /> */}
-            </Grid>
-            <Grid size={{ sm: 6, md: 4, lg: 3 }}>
-              <Card sx={{ width: "100%" }}>
-                <CardMedia
-                  sx={{ height: 140 }}
-                  image="/static/images/cards/contemplative-reptile.jpg"
-                  title="green iguana"
+                    {item.oldPrice}
+                  </Typography>
+                </Box>
+                <Chip 
+                  label={item.tag} 
+                  size="small" 
+                  color="success" 
+                  sx={{ 
+                    borderRadius: 1,
+                    fontSize: { xs: '0.7rem', sm: '0.8rem' }
+                  }} 
                 />
-                <CardContent>
-                  {renderStars(rating)}
-                  <Typography gutterBottom variant="h5" component="div">
-                    Lizard
-                  </Typography>
-                  <Typography
-                    variant="body2"
-                    sx={{
-                      color: "text.secondary",
-                      display: "-webkit-box",
-                      WebkitBoxOrient: "vertical",
-                      WebkitLineClamp: 2, // Limit to 2 lines
-                      overflow: "hidden",
-                      textOverflow: "ellipsis",
-                      maxWidth: "100%", // Adjust width as needed
-                    }}
-                  >
-                    Lizards are a widespread group of squamate reptiles, with over
-                    6,000 species, ranging across all continents except
-                    Antarctica. They are highly adaptable and found in various
-                    environments.
-                  </Typography>
-                </CardContent>
-                <CardActions
-                  sx={{
-                    display: "flex",
-                    flexDirection: "row",
-                    justifyContent: "space-between",
-                    alignItems: "center",
+              </CardContent>
+              <CardActions sx={{ p: 2, pt: 0 }}>
+                <Button 
+                  variant="contained" 
+                  fullWidth
+                  sx={{ 
+                    textTransform: 'none',
+                    borderRadius: 1
                   }}
                 >
-                  <Box
-                    sx={{
-                      display: 'flex',
-                      flexDirection: 'row',
-                      justifyContent: 'start',
-                      alignItems: 'center',
-                      gap: 1
-                    }}
-                  >
-                      <span>
-                        <LocalShippingOutlinedIcon />
-                      </span>
-                    <Typography variant="body2" sx={{color: '#1976d2'}}>
-                      Fast Delivery
-                    </Typography>
-                  </Box>
-                  <Box
-                    sx={{
-                      display: 'flex',
-                      flexDirection: 'row',
-                      justifyContent: 'start',
-                      alignItems: 'center',
-                      gap: 1
-                    }}
-                  >
-                      <span>
-                      <AttachMoneyOutlinedIcon />
-                      </span>
-                    <Typography variant="body2" sx={{color: '#1976d2'}}>
-                      Fast Delivery
-                    </Typography>
-                  </Box>
-                </CardActions>
-              </Card>
-              {/* <AnimatedCardComponent /> */}
-            </Grid>
-            <Grid size={{ sm: 6, md: 4, lg: 3 }}>
-              <Card sx={{ width: "100%" }}>
-                <CardMedia
-                  sx={{ height: 140 }}
-                  image="/static/images/cards/contemplative-reptile.jpg"
-                  title="green iguana"
-                />
-                <CardContent>
-                  {renderStars(rating)}
-                  <Typography gutterBottom variant="h5" component="div">
-                    Lizard
-                  </Typography>
-                  <Typography
-                    variant="body2"
-                    sx={{
-                      color: "text.secondary",
-                      display: "-webkit-box",
-                      WebkitBoxOrient: "vertical",
-                      WebkitLineClamp: 2, // Limit to 2 lines
-                      overflow: "hidden",
-                      textOverflow: "ellipsis",
-                      maxWidth: "100%", // Adjust width as needed
-                    }}
-                  >
-                    Lizards are a widespread group of squamate reptiles, with over
-                    6,000 species, ranging across all continents except
-                    Antarctica. They are highly adaptable and found in various
-                    environments.
-                  </Typography>
-                </CardContent>
-                <CardActions
-                  sx={{
-                    display: "flex",
-                    flexDirection: "row",
-                    justifyContent: "space-between",
-                    alignItems: "center",
-                  }}
-                >
-                  <Box
-                    sx={{
-                      display: 'flex',
-                      flexDirection: 'row',
-                      justifyContent: 'start',
-                      alignItems: 'center',
-                      gap: 1
-                    }}
-                  >
-                      <span>
-                        <LocalShippingOutlinedIcon />
-                      </span>
-                    <Typography variant="body2" sx={{color: '#1976d2'}}>
-                      Fast Delivery
-                    </Typography>
-                  </Box>
-                  <Box
-                    sx={{
-                      display: 'flex',
-                      flexDirection: 'row',
-                      justifyContent: 'start',
-                      alignItems: 'center',
-                      gap: 1
-                    }}
-                  >
-                      <span>
-                      <AttachMoneyOutlinedIcon />
-                      </span>
-                    <Typography variant="body2" sx={{color: '#1976d2'}}>
-                      Fast Delivery
-                    </Typography>
-                  </Box>
-                </CardActions>
-              </Card>
-              {/* <AnimatedCardComponent /> */}
-            </Grid>
-            <Grid size={{ sm: 6, md: 4, lg: 3 }}>
-              <Card sx={{ width: "100%" }}>
-                <CardMedia
-                  sx={{ height: 140 }}
-                  image="/static/images/cards/contemplative-reptile.jpg"
-                  title="green iguana"
-                />
-                <CardContent>
-                  {renderStars(rating)}
-                  <Typography gutterBottom variant="h5" component="div">
-                    Lizard
-                  </Typography>
-                  <Typography
-                    variant="body2"
-                    sx={{
-                      color: "text.secondary",
-                      display: "-webkit-box",
-                      WebkitBoxOrient: "vertical",
-                      WebkitLineClamp: 2, // Limit to 2 lines
-                      overflow: "hidden",
-                      textOverflow: "ellipsis",
-                      maxWidth: "100%", // Adjust width as needed
-                    }}
-                  >
-                    Lizards are a widespread group of squamate reptiles, with over
-                    6,000 species, ranging across all continents except
-                    Antarctica. They are highly adaptable and found in various
-                    environments.
-                  </Typography>
-                </CardContent>
-                <CardActions
-                  sx={{
-                    display: "flex",
-                    flexDirection: "row",
-                    justifyContent: "space-between",
-                    alignItems: "center",
-                  }}
-                >
-                  <Box
-                    sx={{
-                      display: 'flex',
-                      flexDirection: 'row',
-                      justifyContent: 'start',
-                      alignItems: 'center',
-                      gap: 1
-                    }}
-                  >
-                      <span>
-                        <LocalShippingOutlinedIcon />
-                      </span>
-                    <Typography variant="body2" sx={{color: '#1976d2'}}>
-                      Fast Delivery
-                    </Typography>
-                  </Box>
-                  <Box
-                    sx={{
-                      display: 'flex',
-                      flexDirection: 'row',
-                      justifyContent: 'start',
-                      alignItems: 'center',
-                      gap: 1
-                    }}
-                  >
-                      <span>
-                      <AttachMoneyOutlinedIcon />
-                      </span>
-                    <Typography variant="body2" sx={{color: '#1976d2'}}>
-                      Fast Delivery
-                    </Typography>
-                  </Box>
-                </CardActions>
-              </Card>
-              {/* <AnimatedCardComponent /> */}
-            </Grid>
-            <Grid size={{ sm: 6, md: 4, lg: 3 }}>
-              <Card sx={{ width: "100%" }}>
-                <CardMedia
-                  sx={{ height: 140 }}
-                  image="/static/images/cards/contemplative-reptile.jpg"
-                  title="green iguana"
-                />
-                <CardContent>
-                  {renderStars(rating)}
-                  <Typography gutterBottom variant="h5" component="div">
-                    Lizard
-                  </Typography>
-                  <Typography
-                    variant="body2"
-                    sx={{
-                      color: "text.secondary",
-                      display: "-webkit-box",
-                      WebkitBoxOrient: "vertical",
-                      WebkitLineClamp: 2, // Limit to 2 lines
-                      overflow: "hidden",
-                      textOverflow: "ellipsis",
-                      maxWidth: "100%", // Adjust width as needed
-                    }}
-                  >
-                    Lizards are a widespread group of squamate reptiles, with over
-                    6,000 species, ranging across all continents except
-                    Antarctica. They are highly adaptable and found in various
-                    environments.
-                  </Typography>
-                </CardContent>
-                <CardActions
-                  sx={{
-                    display: "flex",
-                    flexDirection: "row",
-                    justifyContent: "space-between",
-                    alignItems: "center",
-                  }}
-                >
-                  <Box
-                    sx={{
-                      display: 'flex',
-                      flexDirection: 'row',
-                      justifyContent: 'start',
-                      alignItems: 'center',
-                      gap: 1
-                    }}
-                  >
-                      <span>
-                        <LocalShippingOutlinedIcon />
-                      </span>
-                    <Typography variant="body2" sx={{color: '#1976d2'}}>
-                      Fast Delivery
-                    </Typography>
-                  </Box>
-                  <Box
-                    sx={{
-                      display: 'flex',
-                      flexDirection: 'row',
-                      justifyContent: 'start',
-                      alignItems: 'center',
-                      gap: 1
-                    }}
-                  >
-                      <span>
-                      <AttachMoneyOutlinedIcon />
-                      </span>
-                    <Typography variant="body2" sx={{color: '#1976d2'}}>
-                      Fast Delivery
-                    </Typography>
-                  </Box>
-                </CardActions>
-              </Card>
-              {/* <AnimatedCardComponent /> */}
-            </Grid>
-            <Grid size={{ sm: 6, md: 4, lg: 3 }}>
-              <Card sx={{ width: "100%" }}>
-                
-                <CardMedia
-                  sx={{ height: 140 }}
-                  image="/static/images/cards/contemplative-reptile.jpg"
-                  title="green iguana"
-                />
-                
-                <CardContent>
-                  {renderStars(rating)}
-                  <Typography gutterBottom variant="h5" component="div">
-                    Lizard
-                  </Typography>
-                  <Typography
-                    variant="body2"
-                    sx={{
-                      color: "text.secondary",
-                      display: "-webkit-box",
-                      WebkitBoxOrient: "vertical",
-                      WebkitLineClamp: 2, // Limit to 2 lines
-                      overflow: "hidden",
-                      textOverflow: "ellipsis",
-                      maxWidth: "100%", // Adjust width as needed
-                    }}
-                  >
-                    Lizards are a widespread group of squamate reptiles, with over
-                    6,000 species, ranging across all continents except
-                    Antarctica. They are highly adaptable and found in various
-                    environments.
-                  </Typography>
-                </CardContent>
-                <CardActions
-                  sx={{
-                    display: "flex",
-                    flexDirection: "row",
-                    justifyContent: "space-between",
-                    alignItems: "center",
-                  }}
-                >
-                  <Box
-                    sx={{
-                      display: 'flex',
-                      flexDirection: 'row',
-                      justifyContent: 'start',
-                      alignItems: 'center',
-                      gap: 1
-                    }}
-                  >
-                      <span>
-                        <LocalShippingOutlinedIcon />
-                      </span>
-                    <Typography variant="body2" sx={{color: '#1976d2'}}>
-                      Fast Delivery
-                    </Typography>
-                  </Box>
-                  <Box
-                    sx={{
-                      display: 'flex',
-                      flexDirection: 'row',
-                      justifyContent: 'start',
-                      alignItems: 'center',
-                      gap: 1
-                    }}
-                  >
-                      <span>
-                      <AttachMoneyOutlinedIcon />
-                      </span>
-                    <Typography variant="body2" sx={{color: '#1976d2'}}>
-                      Fast Delivery
-                    </Typography>
-                  </Box>
-                </CardActions>
-              </Card>
-              {/* <AnimatedCardComponent /> */}
-            </Grid>
+                  Add to Cart
+                </Button>
+              </CardActions>
+            </Card>
           </Grid>
+        ))}
+      </Grid>
         </Box>
         
     </Box>

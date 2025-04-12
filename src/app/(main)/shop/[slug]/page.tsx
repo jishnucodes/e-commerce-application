@@ -13,20 +13,17 @@ import {
   ToggleButton,
   IconButton,
   Button,
+  Tab,
+  Tabs,
 } from "@mui/material";
 import Image from "next/image";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
 import Rating from "@mui/material/Rating";
-
-const categories = [
-  { name: "Fashion", icon: "/backpacks.jpg" },
-  { name: "Mobiles", icon: "/backpacks.jpg" },
-  { name: "Food", icon: "/backpacks.jpg" },
-  { name: "Home", icon: "/backpacks.jpg" },
-  { name: "Beauty", icon: "/backpacks.jpg" },
-];
+import FeaturedProducts from "@/components/featured-products/FeaturedProducts";
+import ProductReviews from "@/components/reviews/ProductReviews";
+  
 
 const products = [
   {
@@ -52,16 +49,45 @@ const products = [
   },
 ];
 
+interface TabPanelProps {
+  children?: React.ReactNode;
+  value: string;
+  index: string;
+}
+
+const TabPanel = ({ children, value, index }: TabPanelProps) => {
+  return (
+    <div
+      role="tabpanel"
+      hidden={value !== index}
+      id={`tabpanel-${index}`}
+      aria-labelledby={`tab-${index}`}
+    >
+      {value === index && (
+        <Box sx={{ p: 3, color: "black" }}>
+          {children}
+        </Box>
+      )}
+    </div>
+  );
+};
+
 const SingleProductDetails = () => {
   const [quantity, setQuantity] = useState(1);
   const [selectedStyle, setSelectedStyle] = useState("green");
   const [appleCare, setAppleCare] = useState("without");
+  const [activeTab, setActiveTab] = useState("description");
 
   const handleQuantityChange = (type: "add" | "remove") => {
     setQuantity((prev) =>
       type === "add" ? prev + 1 : prev > 1 ? prev - 1 : 1
     );
   };
+  
+  const handleTabChange = (event: React.SyntheticEvent, newValue: string) => {
+    setActiveTab(newValue);
+  };
+  
   const handleClick = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     event.preventDefault();
     console.info("You clicked a breadcrumb.");
@@ -239,8 +265,75 @@ const SingleProductDetails = () => {
                 Without Apple Care
               </ToggleButton>
             </ToggleButtonGroup>
+
+            {/* categories, share, compare */}
+            <Box 
+              sx={{ 
+                display: "flex", 
+                flexDirection: "column",  
+                alignItems: "start", 
+                justifyContent: 'space-between', 
+                mt: 2 
+                }}
+            >
+              <Box>
+                <Typography variant="body1" fontWeight={500} sx={{ mt: 2 }}>
+                  Sku:
+                </Typography>
+              </Box>
+              <Box>
+                <Typography variant="body1" fontWeight={500} sx={{ mt: 2 }}>
+                  Categories:
+                </Typography>
+              </Box>
+              <Box>
+                <Typography variant="body1" fontWeight={500} sx={{ mt: 2 }}>
+                Share:
+                </Typography>
+              </Box>
+            </Box>
           </Grid>
         </Grid>
+      </Box>
+      <Box component="div">
+        <Tabs 
+          value={activeTab} 
+          onChange={handleTabChange} 
+          sx={{ borderBottom: 1, borderColor: 'divider' }}
+        >
+          <Tab 
+            label="Description" 
+            value="description" 
+            sx={{ textTransform: 'none' }}
+          />
+          <Tab 
+            label="Specifications" 
+            value="specifications" 
+            sx={{ textTransform: 'none' }}
+          />
+        </Tabs>
+        <TabPanel value={activeTab} index="description">
+          <Typography variant="body1" sx={{ mt: 2 }}>
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+          </Typography>
+        </TabPanel>
+        <TabPanel value={activeTab} index="specifications">
+          <Typography variant="body1" component="div" sx={{ mt: 2 }}>
+            <ul>
+              <li>Display: 6.1-inch Super Retina XDR display</li>
+              <li>Processor: A15 Bionic chip</li>
+              <li>Camera: Dual 12MP camera system</li>
+              <li>Battery: Up to 19 hours video playback</li>
+              <li>Storage: 128GB, 256GB, 512GB</li>
+            </ul>
+          </Typography>
+        </TabPanel>
+      </Box>
+      <Box component="div">
+        <ProductReviews />
+      </Box>
+      <Box component="div">
+        <FeaturedProducts />
       </Box>
     </Box>
   );

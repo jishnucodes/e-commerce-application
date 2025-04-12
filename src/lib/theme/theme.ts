@@ -1,10 +1,10 @@
-import { createTheme, ThemeOptions } from "@mui/material/styles";
+import { createTheme } from "@mui/material/styles";
 
-
-
+// Create a base theme instance for breakpoints
+const baseTheme = createTheme();
 
 // Light Theme Configuration
-const lightTheme:ThemeOptions  = createTheme({
+const lightTheme = createTheme({
   palette: {
     mode: "light",
     primary: {
@@ -24,26 +24,25 @@ const lightTheme:ThemeOptions  = createTheme({
   },
   typography: {
     fontFamily: "CaviarDreams_Bold ,Garmit-Light",
-    
   },
   mainFontStyles: {
-    fontFamily: "Arial, sans-serif", // ✅ Now properly recognized
+    fontFamily: "Arial, sans-serif",
   },
   navFontStyles: {
     fontFamily: "CaviarDreams_Bold",
     fontSize: "12px",
     textTransform: "capitalize",
-    [createTheme().breakpoints.up("sm")] : {
+    [baseTheme.breakpoints.up("sm")]: {
       fontSize: "14px"
     },
-    [createTheme().breakpoints.up("md")] : {
+    [baseTheme.breakpoints.up("md")]: {
       fontSize: "16px"
     }
   }
 });
 
 // Dark Theme Configuration
-const darkTheme:ThemeOptions = createTheme({
+const darkTheme = createTheme({
   palette: {
     mode: "dark",
     primary: {
@@ -62,19 +61,19 @@ const darkTheme:ThemeOptions = createTheme({
     },
   },
   typography: {
-    fontFamily: "CaviarDreams_Bold ,Garmit-Light" ,
+    fontFamily: "CaviarDreams_Bold ,Garmit-Light",
   },
   mainFontStyles: {
-    fontFamily: "Poppins", 
+    fontFamily: "Poppins",
   },
   navFontStyles: {
     fontFamily: "CaviarDreams_Bold",
     fontSize: "12px",
     textTransform: "capitalize",
-    [createTheme().breakpoints.up("sm")] : {
+    [baseTheme.breakpoints.up("sm")]: {
       fontSize: "14px"
     },
-    [createTheme().breakpoints.up("md")] : {
+    [baseTheme.breakpoints.up("md")]: {
       fontSize: "16px"
     }
   }
