@@ -25,6 +25,7 @@ import LocalShippingOutlinedIcon from "@mui/icons-material/LocalShippingOutlined
 import AttachMoneyOutlinedIcon from "@mui/icons-material/AttachMoneyOutlined";
 import ProductImageZoom from "@/components/product-image-zoom/ProductImageZoom";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 const menuItemValues = [
   "alphabetic",
   "price: low to high",
@@ -46,6 +47,8 @@ const stars = [
 const products = [
   {
     name: "Plant Stand",
+    categorySlug: "plant-stand",
+    slug: "plant-stand",
     price: "₹3,013",
     oldPrice: "₹4,999",
     image: "/backpacks.jpg",
@@ -53,6 +56,8 @@ const products = [
   },
   {
     name: "Metal Shelf",
+    categorySlug: "metal-shelf",
+    slug: "metal-shelf",
     price: "₹2,697",
     oldPrice: "₹3,499",
     image: "/backpacks.jpg",
@@ -60,6 +65,8 @@ const products = [
   },
   {
     name: "Potted Stand",
+    categorySlug: "potted-stand",
+    slug: "potted-stand",
     price: "₹1,159",
     oldPrice: "₹4,999",
     image: "/backpacks.jpg",
@@ -67,6 +74,8 @@ const products = [
   },
   {
     name: "Potted Stand",
+    categorySlug: "potted-stand",
+    slug: "potted-stand",
     price: "₹1,159",
     oldPrice: "₹4,999",
     image: "/backpacks.jpg",
@@ -74,6 +83,8 @@ const products = [
   },
   {
     name: "Plant Stand",
+    categorySlug: "plant-stand",
+    slug: "plant-stand",
     price: "₹3,013",
     oldPrice: "₹4,999",
     image: "/backpacks.jpg",
@@ -81,6 +92,8 @@ const products = [
   },
   {
     name: "Metal Shelf",
+    categorySlug: "metal-shelf",
+    slug: "metal-shelf",
     price: "₹2,697",
     oldPrice: "₹3,499",
     image: "/backpacks.jpg",
@@ -88,6 +101,8 @@ const products = [
   },
   {
     name: "Potted Stand",
+    categorySlug: "potted-stand",
+    slug: "potted-stand",
     price: "₹1,159",
     oldPrice: "₹4,999",
     image: "/backpacks.jpg",
@@ -95,6 +110,8 @@ const products = [
   },
   {
     name: "Potted Stand",
+    categorySlug: "potted-stand",
+    slug: "potted-stand",
     price: "₹1,159",
     oldPrice: "₹4,999",
     image: "/backpacks.jpg",
@@ -108,6 +125,8 @@ const ProductDisplaySection = () => {
   const [selectedValue, setSelectedValue] = useState<string>(menuItemValues[3]);
   const [isRatedProduct, setIsRatedProduct] = useState<boolean>(true);
   const [drawerOpen, setDrawerOpen] = useState<boolean>(false)
+
+  const router = useRouter();
 
   const rating = 3.5;
 
@@ -171,6 +190,11 @@ const ProductDisplaySection = () => {
     );
   };
 
+  const handleProductClick = (item: any) => {
+    console.log("clicked product", item);
+    router.push(`/product/${item.categorySlug}/${item.slug}`);
+  };
+
   return (
     <Box component="div">
       <MobileDrawableFilterComponent open={drawerOpen} handleCloseDrawer={handleDrawerClose} />
@@ -187,7 +211,7 @@ const ProductDisplaySection = () => {
       >
         <Box
           component="div"
-          sx={{
+          sx={(theme) => ({
             display: "flex",
             flexDirection: "row",
             justifyContent: "space-between",
@@ -196,7 +220,8 @@ const ProductDisplaySection = () => {
             "&:hover": {
               cursor: "pointer",
             },
-          }}
+            color: theme.palette.text.secondary,
+          })}
           onClick={handleDrawerOpen}
         >
           <span>
@@ -206,16 +231,17 @@ const ProductDisplaySection = () => {
         </Box>
         <Box
           component="div"
-          sx={{
+          sx={(theme) => ({
             display: "flex",
             flexDirection: "row",
             justifyContent: "space-between",
             alignItems: "center",
             padding: "10px",
             gap: 1,
-            fontFamily:"CaviarDreams_Bold"
+            fontFamily:"CaviarDreams_Bold",
+            color: theme.palette.text.secondary,
 
-          }}
+          })}
         >
           <Box component="div">
             <Button
@@ -225,6 +251,10 @@ const ProductDisplaySection = () => {
               aria-expanded={open ? "true" : undefined}
               onClick={handleClick}
               variant="outlined"
+              sx={(theme) => ({
+                color: theme.palette.text.secondary,
+                textTransform: "capitalize",
+              })}
             >
               {selectedValue}
             </Button>
@@ -234,16 +264,34 @@ const ProductDisplaySection = () => {
               open={open}
               onClose={handleClose}
             >
-              <MenuItem onClick={() => handleMenuItemClick(menuItemValues[0])}>
+              <MenuItem onClick={() => handleMenuItemClick(menuItemValues[0])}
+                sx={(theme) => ({
+                  color: theme.palette.text.secondary,
+                  textTransform: "capitalize",
+                })}
+              >
                 Alphabetic
               </MenuItem>
-              <MenuItem onClick={() => handleMenuItemClick(menuItemValues[1])}>
+              <MenuItem onClick={() => handleMenuItemClick(menuItemValues[1])}
+                sx={(theme) => ({
+                  color: theme.palette.text.secondary,
+                  textTransform: "capitalize",
+                })}>
                 Price: Low to high
               </MenuItem>
-              <MenuItem onClick={() => handleMenuItemClick(menuItemValues[2])}>
+              <MenuItem onClick={() => handleMenuItemClick(menuItemValues[2])}
+                sx={(theme) => ({
+                  color: theme.palette.text.secondary,
+                  textTransform: "capitalize",
+                })}
+              >
                 Price: High to low
               </MenuItem>
-              <MenuItem onClick={() => handleMenuItemClick(menuItemValues[3])}>
+              <MenuItem onClick={() => handleMenuItemClick(menuItemValues[3])}
+                sx={(theme) => ({
+                  color: theme.palette.text.secondary,
+                  textTransform: "capitalize",
+                })}>
                 Latest
               </MenuItem>
             </Menu>
@@ -259,19 +307,21 @@ const ProductDisplaySection = () => {
           >
             <Box
               component="div"
-              sx={{
+              sx={(theme) => ({
                 display: "flex", // Use flexbox for inline layout
                 alignItems: "center", // Align items vertically centered
                 gap: 1, // Add spacing between items
-              }}
+                color: theme.palette.text.secondary,
+              })}
             >
               <Typography variant="body1">Show:</Typography>
               <TextField
                 variant="outlined"
                 size="small" // Smaller input field for better spacing
-                sx={{
+                sx={(theme) => ({
                   width: "100px",
-                }}
+                  color: theme.palette.text.secondary,
+                })}
               />
             </Box>
           </Box>
@@ -281,19 +331,21 @@ const ProductDisplaySection = () => {
       
           <Box 
           component="div" 
-          sx={{
+          sx={(theme) => ({
             overflow: 'hidden',
             display: 'flex',
             justifyContent: 'start',
             alignItems: 'center',
             width: '100%',
-            mt: 2
-          }}
+            mt: 2,
+            color: theme.palette.text.secondary,
+          })}
         >
           <Grid container spacing={3} sx={{ p: 2 }}>
         {products.map((item, index) => (
           <Grid size={{ xs: 6, sm: 6, md: 4, lg: 3 }} key={index}>
             <Card 
+              onClick={() => handleProductClick(item)}
               sx={{ 
                 height: '100%', 
                 display: 'flex', 

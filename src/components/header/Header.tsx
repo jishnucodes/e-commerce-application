@@ -67,6 +67,7 @@ const Header = () => {
           icon: <DarkMode />,
         },
       ],
+      label: "Theme",
     },
     {
       id: 3,
@@ -95,7 +96,7 @@ const Header = () => {
       <Typography variant="h6" sx={{ my: 1 }}>
         Main Menu
       </Typography>
-      <Typography variant="body2" sx={{mb: 1}}>
+      <Typography variant="body2" sx={{ mb: 1 }}>
         Select a option tab
       </Typography>
       {/* <List sx={{ display: "flex", flexDirection: "column" }}>
@@ -155,83 +156,90 @@ const Header = () => {
       <Box sx={{ display: "flex", padding: "0px" }}>
         <CssBaseline />
         <Container>
-        <AppBar
-          component="nav"
-          sx={{ background: "#ffff", color: "#424242", padding: "0px" }}
-        >
-          <Toolbar 
-            sx={{
-              height: "40px",
-              minHeight: { xs: "40px", sm: "40px" },
-              justifyContent: {sm: 'space-between', md: 'space-between'}
-            }}
+          <AppBar
+            component="nav"
+            sx={(theme) => ({
+              backgroundColor: theme.palette.background.default,
+              color: theme.palette.text.secondary,
+              padding: "0px",
+            })}
           >
-            <IconButton
-              color="inherit"
-              aria-label="open drawer"
-              edge="start"
-              onClick={handleDrawerToggle}
-              sx={{ mr: 2, display: { md: "none" } }}
+            <Toolbar
+              sx={{
+                height: "40px",
+                minHeight: { xs: "40px", sm: "40px" },
+                justifyContent: { sm: "space-between", md: "space-between" },
+              }}
             >
-              <MenuIcon />
-            </IconButton>
-            <Typography
-              variant="h6"
-              component="div"
-              sx={{ flexGrow: 1,fontFamily:"CaviarDreams_Bold", display: { xs: "none", sm: "none",  md: "block" }, fontSize: {md: '20px', lg:'20px'} }}
-            >
-              Welcome To Carrefour Store
-            </Typography>
-            <Box sx={{ display: { xs: "none", sm: "none", md: "block" } }}>
-              {navItems.map((item) => (
-                <React.Fragment key={item.id}>
-                  {item.id === navItems[2].id ? (
-                    <DropdownNavButton key={item.id} item={item} />
-                  ) : (
-                    <Button
-                      type="button"
-                      key={item.id}
-                      startIcon={
-                        item.id !== navItems[2].id && item.icon
+              <IconButton
+                color="inherit"
+                aria-label="open drawer"
+                edge="start"
+                onClick={handleDrawerToggle}
+                sx={{ mr: 2, display: { md: "none" } }}
+              >
+                <MenuIcon />
+              </IconButton>
+              <Typography
+                variant="h6"
+                component="div"
+                sx={{
+                  flexGrow: 1,
+                  fontFamily: "CaviarDreams_Bold",
+                  display: { xs: "none", sm: "none", md: "block" },
+                  fontSize: { md: "20px", lg: "20px" },
+                }}
+              >
+                Welcome To Carrefour Store
+              </Typography>
+              <Box sx={{ display: { xs: "none", sm: "none", md: "block" } }}>
+                {navItems.map((item) => (
+                  <React.Fragment key={item.id}>
+                    {item.id === navItems[2].id ? (
+                      <DropdownNavButton key={item.id} item={item} />
+                    ) : (
+                      <Button
+                        type="button"
+                        key={item.id}
+                        startIcon={
+                          item.id !== navItems[2].id && item.icon
+                            ? Array.isArray(item.icon)
+                              ? themeMode == "light"
+                                ? item.icon[1].icon
+                                : item.icon[0].icon
+                              : item.icon
+                            : null
+                        }
+                        sx={{
+                          ...theme?.navFontStyles,
+                          marginRight: "10px",
+                        }}
+                        onClick={() =>
+                          dispatch(
+                            toggleTheme(themeMode == "dark" ? "light" : "dark")
+                          )
+                        }
+                      >
+                        {item.id !== navItems[2].id && item.icon
                           ? Array.isArray(item.icon)
                             ? themeMode == "light"
-                              ? item.icon[1].icon
-                              : item.icon[0].icon
-                            : item.icon
-                          : null
-                      }
-                      sx={{
-                        ...theme?.navFontStyles,
-                        color: "#424242",
-                        marginRight: "10px",
-                      }}
-                      onClick={() =>
-                        dispatch(
-                          toggleTheme(themeMode == "dark" ? "light" : "dark")
-                        )
-                      }
-                      
-                    >
-                      {item.id !== navItems[2].id && item.icon
-                        ? Array.isArray(item.icon)
-                          ? themeMode == "light"
-                            ? item.icon[1].label
-                            : item.icon[0].label
-                          : item.label
-                        : null}
-                    </Button>
-                  )}
-                </React.Fragment>
-              ))}
-              {/* <Button onClick={() => dispatch(toggleTheme("light"))}>
+                              ? item.icon[1].label
+                              : item.icon[0].label
+                            : item.label
+                          : null}
+                      </Button>
+                    )}
+                  </React.Fragment>
+                ))}
+                {/* <Button onClick={() => dispatch(toggleTheme("light"))}>
                   <DarkMode />
                 </Button> */}
-            </Box>
-          </Toolbar>
-          <Divider />
-          <SubHeader />
-        </AppBar>
-          </Container>
+              </Box>
+            </Toolbar>
+            <Divider />
+            <SubHeader />
+          </AppBar>
+        </Container>
         <nav>
           <Drawer
             anchor="right"
@@ -247,7 +255,7 @@ const Header = () => {
                 boxSizing: "border-box",
                 maxWidth: drawerWidth,
                 width: "100%",
-                background: "white"
+                background: "white",
               },
             }}
           >
@@ -258,7 +266,6 @@ const Header = () => {
       {/* <Box sx={{position: 'absolute', top: '100px', width: "100%"}} component="div">
       <SubHeader />
       </Box> */}
-      
     </Box>
   );
 };

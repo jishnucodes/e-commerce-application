@@ -8,18 +8,22 @@ const lightTheme = createTheme({
   palette: {
     mode: "light",
     primary: {
-      main: "#1976d2",
+      main: "#0118D8",
+      light: "#0118D8",
     },
     secondary: {
-      main: "#dc004e",
+      main: "#090910",
+      light: "#3f3d3d",
     },
+    
     background: {
       default: "#fff5f5",
       paper: "#f4f6f8",
     },
     text: {
       primary: "#0118D8",
-      secondary: "#3f3d3d",
+      secondary: "#090910",
+      tertiary: "#3f3d3d",
     },
   },
   typography: {
@@ -37,7 +41,21 @@ const lightTheme = createTheme({
     },
     [baseTheme.breakpoints.up("md")]: {
       fontSize: "16px"
-    }
+    },
+    color: "#090910",
+  },
+  buttonStyles: {
+    backgroundColor: "#253bfe",
+    fontFamily: "CaviarDreams_Bold",
+    fontSize: "12px",
+    textTransform: "capitalize",
+    [baseTheme.breakpoints.up("sm")]: {
+      fontSize: "14px"
+    },
+    [baseTheme.breakpoints.up("md")]: {
+      fontSize: "16px"
+    },
+    color: "#F3F3FF",
   }
 });
 
@@ -46,10 +64,12 @@ const darkTheme = createTheme({
   palette: {
     mode: "dark",
     primary: {
-      main: "#90caf9",
+      main: "#253bfe",
+      light: "#253bfe",
     },
     secondary: {
-      main: "#f48fb1",
+      main: "#F3F3FF",
+      light: "#adadad",
     },
     background: {
       default: "#16151e",
@@ -57,7 +77,8 @@ const darkTheme = createTheme({
     },
     text: {
       primary: "#253bfe",
-      secondary: "#adadad",
+      secondary: "#F3F3FF",
+      tertiary: "#adadad",
     },
   },
   typography: {
@@ -75,7 +96,21 @@ const darkTheme = createTheme({
     },
     [baseTheme.breakpoints.up("md")]: {
       fontSize: "16px"
-    }
+    },
+    color: "#F3F3FF",
+  },
+  buttonStyles: {
+    backgroundColor: "#253bfe",
+    fontFamily: "CaviarDreams_Bold",
+    fontSize: "12px",
+    textTransform: "capitalize",
+    [baseTheme.breakpoints.up("sm")]: {
+      fontSize: "14px"
+    },
+    [baseTheme.breakpoints.up("md")]: {
+      fontSize: "16px"
+    },
+    color: "#F3F3FF",
   }
 });
 

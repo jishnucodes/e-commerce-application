@@ -43,7 +43,7 @@ const page = () => {
             <CardMedia
               component="img"
               height="100%"
-              image={"./shopImg-1.png"}
+              image={"/shopImg-1.png"}
               alt="green iguana"
               sx={{
                 width: { xs: "100%", sm: "100%", md: "100%" }, // Adjust the width as needed

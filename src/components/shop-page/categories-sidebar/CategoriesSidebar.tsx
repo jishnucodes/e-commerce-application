@@ -19,6 +19,7 @@ import {
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../../store";
+import Link from "next/link";
 
 type RangeValue = {
   minValue: number | string; // Allow string to handle empty input
@@ -77,18 +78,25 @@ const CategoriesSidebar = () => {
             <React.Fragment key={category.id}>
             <ListItem
               key={category.id}
-              sx={{
+              component={Link}
+              href={`/product/${category.slug}`}
+              sx={(theme) => ({
                 fontFamily: "CaviarDreams_Bold",
-              }}
+                color: theme.palette.text.secondary,
+                "&:hover": {
+                  cursor: "pointer",
+                },
+              })}
             >
               <ListItemText
                 primary={category.name}
-                sx={{
+                sx={(theme) => ({
                   fontFamily: "CaviarDreams_Bold",
                   "&:hover": {
                     cursor: "pointer",
                   },
-                }}
+                  color: theme.palette.text.secondary,
+                })}
               />
             </ListItem>
             <Divider />
@@ -104,7 +112,14 @@ const CategoriesSidebar = () => {
           }}
         >
           <Box component="div" mt={2}>
-            <Typography variant="h5">Filters</Typography>
+            <Typography 
+              variant="h5"
+              sx={(theme) => ({
+                color: theme.palette.text.secondary,
+              })}
+            >
+              Filters
+            </Typography>
           </Box>
           <Divider
             sx={{
@@ -113,16 +128,17 @@ const CategoriesSidebar = () => {
           />
           <Typography
             variant="body1"
-            sx={{
+            sx={(theme) => ({
               fontSize: "13px",
               mt: 2,
-            }}
+              color: theme.palette.text.secondary,
+            })}
           >
             Price
           </Typography>
           <Box
             component="div"
-            sx={{
+            sx={(theme) => ({
               display: "flex",
               flexDirection: "column",
               alignItems: "center",
@@ -131,26 +147,33 @@ const CategoriesSidebar = () => {
               marginTop: 2,
               padding: 1,
               overflow: "hidden",
-            }}
+            })}
           >
             <Box
               component="div"
-              sx={{
+              sx={(theme) => ({
                 width: "100%",
                 display: "flex",
                 flexDirection: "row",
                 justifyContent: "space-between",
                 alignItems: "center",
                 gap: 2,
-              }}
+              })}
             >
               <Box
                 component="div"
-                sx={{
+                sx={(theme) => ({
                   width: "100%",
-                }}
+                })}
               >
-                <Typography variant="body2">Min Price</Typography>
+                <Typography 
+                  variant="body2"
+                  sx={(theme) => ({
+                    color: theme.palette.text.secondary,
+                  })}
+                >
+                  Min Price
+                </Typography>
                 <Slider
                   value={
                     typeof rangeValue.minValue === "number"
@@ -168,11 +191,18 @@ const CategoriesSidebar = () => {
               </Box>
               <Box
                 component="div"
-                sx={{
+                sx={(theme) => ({
                   width: "100%",
-                }}
+                })}
               >
-                <Typography variant="body2">Max Price</Typography>
+                <Typography 
+                  variant="body2"
+                  sx={(theme) => ({
+                    color: theme.palette.text.secondary,
+                  })}
+                >
+                  Max Price 
+                </Typography>
                 <Slider
                   value={
                     typeof rangeValue.maxValue === "number"
@@ -191,62 +221,100 @@ const CategoriesSidebar = () => {
             </Box>
             <Box
               component="div"
-              sx={{
+              sx={(theme) => ({
                 width: "100%",
                 display: "flex",
                 flexDirection: "row",
                 justifyContent: "space-between",
                 alignItems: "center",
                 gap: 2,
-              }}
+              })}
             >
               <Box
                 component="div"
-                sx={{
+                sx={(theme) => ({
                   display: "flex",
                   flexDirection: "row",
                   alignItems: "center",
                   gap: 2,
-                }}
+                })}
               >
                 <TextField
                   variant="outlined"
                   size="small"
                   value={rangeValue.minValue}
                   onChange={(e) => handleTextFieldChange(e, "minValue")}
+                  sx={(theme) => ({
+                    width: "100%",
+                    color: theme.palette.text.secondary,
+                    "& .MuiInputBase-input": {
+                      color: theme.palette.text.secondary
+                    }
+                  })}
                 />
               </Box>
-              <Typography variant="body2">to</Typography>
+              <Typography 
+                variant="body2"
+                sx={(theme) => ({
+                  color: theme.palette.text.secondary,
+                })}
+              >
+                to
+              </Typography>
               <Box
                 component="div"
-                sx={{
+                sx={(theme) => ({
                   display: "flex",
                   flexDirection: "row",
                   alignItems: "center",
                   gap: 2,
-                }}
+                })}
               >
                 <TextField
+                  variant="outlined" 
+                  size="small"
+                  value={rangeValue.maxValue}
+                  onChange={(e) => handleTextFieldChange(e, "maxValue")}
+                  sx={(theme) => ({
+                    width: "100%",
+                    color: theme.palette.text.secondary,
+                    "& .MuiInputBase-input": {
+                      color: theme.palette.text.secondary
+                    }
+                  })}
+                />
+                {/* <TextField
                   variant="outlined"
                   size="small"
                   value={rangeValue.maxValue}
                   onChange={(e) => handleTextFieldChange(e, "maxValue")}
-                />
+                  sx={(theme) => ({
+                    color: theme.palette.text.secondary,
+
+                  })}
+                /> */}
               </Box>
             </Box>
           </Box>
         </Box>
         <Box
           component="div"
-          sx={{
+          sx={(theme) => ({
             padding: "8px 16px",
-          }}
+          })}
         >
           <Box 
             component="div"
             mt={2}
           >
-            <Typography variant="h5">Latest Products</Typography>
+            <Typography 
+              variant="h5"
+              sx={(theme) => ({
+                color: theme.palette.text.secondary,
+              })}
+            >
+              Latest Products
+            </Typography>
           </Box>
           <Divider
             sx={{
@@ -256,19 +324,19 @@ const CategoriesSidebar = () => {
         </Box>
         <Box 
           component="div"
-          sx={{
+          sx={(theme) => ({
             padding: "8px 16px",
             display: 'flex',
             flexDirection: 'column',
             gap: 1
-          }}
+          })}
         >
           <Card sx={{ display: "flex" }}>
             <Box sx={{ display: "flex", flexDirection: "row" }}>
               <CardMedia
                 component="img"
                 sx={{ width: "50%" }}
-                image="./backpacks.jpg"
+                image="/backpacks.jpg"
                 alt="Live from space album cover"
               />
               <CardContent sx={{ flex: "1 0 auto", width: "50%" }}>
@@ -290,7 +358,7 @@ const CategoriesSidebar = () => {
               <CardMedia
                 component="img"
                 sx={{ width: "50%" }}
-                image="./backpacks.jpg"
+                image="/backpacks.jpg"
                 alt="Live from space album cover"
               />
               <CardContent sx={{ flex: "1 0 auto", width: "50%" }}>

@@ -24,6 +24,7 @@ export default function MainLayout({
           {/* Main Layout */}
           <Box
             sx={{
+              
               display: "flex",
               flexDirection: "column",
               marginTop: { xs: "70px", sm: "70px", md: "200px" },

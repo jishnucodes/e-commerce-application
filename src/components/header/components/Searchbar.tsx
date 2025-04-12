@@ -30,9 +30,17 @@ const Searchbar: React.FC = () => {
 
       <Button
         variant="outlined"
-        sx={{
-          width: '90%'
-        }}
+        sx={(theme) => ({
+          width: '90%',
+          color: theme.palette.text.secondary,
+          textTransform: "capitalize",
+          fontFamily: "CaviarDreams_Bold",
+          fontSize: "12px",
+          [theme.breakpoints.up("sm")]: {
+            fontSize: "14px"
+          },
+          
+        })}
       >
         Search Product
       </Button>

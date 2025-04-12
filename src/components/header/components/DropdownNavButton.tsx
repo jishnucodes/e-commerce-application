@@ -6,7 +6,7 @@ import { useTheme } from "@mui/material";
 
 type Item = {
   id: number;
-  icon?: React.ReactNode | undefined;
+  icon?: React.ReactNode | { id: number; label: string; icon: React.JSX.Element }[] | undefined;
   label: string;
 };
 
@@ -39,9 +39,9 @@ export default function DropdownNavButton(props: DropdownNavButtonProps) {
         aria-controls={open ? "basic-menu" : undefined}
         aria-haspopup="true"
         aria-expanded={open ? "true" : undefined}
-        endIcon={item?.icon}
+        endIcon={Array.isArray(item?.icon) ? item?.icon[0].icon : item?.icon}
         onClick={handleClick}
-        sx={{ ...theme.navFontStyles, color: "#424242" }}
+        sx={{ ...theme.navFontStyles }}
       >
         {item?.label}
       </Button>
@@ -54,9 +54,9 @@ export default function DropdownNavButton(props: DropdownNavButtonProps) {
           "aria-labelledby": "basic-button",
         }}
       >
-        <MenuItem onClick={handleClose} sx={{ ...theme.navFontStyles, color: "#424242" }}>Profile</MenuItem>
-        <MenuItem onClick={handleClose} sx={{ ...theme.navFontStyles, color: "#424242" }}>My account</MenuItem>
-        <MenuItem onClick={handleClose} sx={{ ...theme.navFontStyles, color: "#424242" }}>Logout</MenuItem>
+        <MenuItem onClick={handleClose} sx={{ ...theme.navFontStyles}}>Profile</MenuItem>
+        <MenuItem onClick={handleClose} sx={{ ...theme.navFontStyles}}>My account</MenuItem>
+        <MenuItem onClick={handleClose} sx={{ ...theme.navFontStyles}}>Logout</MenuItem>
       </Menu>
     </>
   );
