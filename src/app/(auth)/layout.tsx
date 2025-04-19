@@ -8,16 +8,7 @@ export default function AuthLayout({
 }) {
   console.log('Rendering AUTH layout');
   return (
-    <html lang="en">
-      <head>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link
-          rel="preconnect"
-          href="https://fonts.gstatic.com"
-          crossOrigin="anonymous"
-        />
-      </head>
-      <body>
+    
         <StoreProvider>
           {/* No header/footer here */}
           <Box sx={{ 
@@ -27,7 +18,6 @@ export default function AuthLayout({
             {children}
           </Box>
         </StoreProvider>
-      </body>
-    </html>
+      
   );
 }

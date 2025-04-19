@@ -5,6 +5,7 @@ import { Box, List, ListItem, ListItemText, useMediaQuery, useTheme } from "@mui
 import React from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../store";
+import Link from "next/link";
 
 const Sidebar = () => {
   const { isSidebarOpen } = useSelector((state: RootState) => state.header);
@@ -20,25 +21,35 @@ const Sidebar = () => {
             // maxWidth: "220px",
             width: "100%",
             height: "100%",
-            overflow: "auto"
+            overflow: "auto",
+            "&::-webkit-scrollbar": {
+              display: "none",
+            },  
           }}
         >
           <List>
             {Categories.map((category) => (
               <ListItem
                 key={category.id}
-                sx={{
+                component={Link}
+                href={`/product/${category.slug}`}
+                sx={(theme) => ({
                   fontFamily: "CaviarDreams_Bold",
-                }}
+                  color: theme.palette.text.secondary,
+                  "&:hover": {
+                    cursor: "pointer",
+                  },
+                })}
               >
                 <ListItemText
                   primary={category.name}
-                  sx={{
+                  sx={(theme) => ({
                     fontFamily: "CaviarDreams_Bold",
                     "&:hover": {
                       cursor: "pointer",
                     },
-                  }}
+                    color: theme.palette.text.secondary,
+                  })}
                 />
               </ListItem>
             ))}

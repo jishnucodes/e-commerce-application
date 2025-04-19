@@ -107,6 +107,9 @@ const SubHeader = () => {
           color="primary"
           endIcon={<WidgetsOutlinedIcon />}
           onClick={handleMenuIconClick}
+          sx={(theme) => ({
+            ...theme.buttonStyles,
+          })}
         >
           Categories
         </Button>

@@ -15,15 +15,14 @@ export default function MainLayout({
   console.log('Rendering ROOT layout');
  
   return (
-    <html lang="en">
-      
-      <body>
+    
         <StoreProvider>
           <Header />
 
           {/* Main Layout */}
           <Box
             sx={{
+              
               display: "flex",
               flexDirection: "column",
               marginTop: { xs: "70px", sm: "70px", md: "200px" },
@@ -49,7 +48,6 @@ export default function MainLayout({
           </Box>
           <BottomNavigationComponent />
         </StoreProvider>
-      </body>
-    </html>
+     
   );
 }

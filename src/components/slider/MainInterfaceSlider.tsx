@@ -136,8 +136,8 @@ const MainInterfaceSlider: React.FC = () => {
                       variants={titleVariants}
                       gutterBottom
                       variant="h5"
-                      sx={{
-                        color:"#0118D8", 
+                      sx={(theme) => ({
+                        color: theme.palette.text.primary, 
                         fontFamily: "Copeland",
                         fontWeight: 700,
                         background: 'linear-gradient(45deg, #2b5876 0%, #4e4376 100%)',
@@ -177,7 +177,7 @@ const MainInterfaceSlider: React.FC = () => {
                           },
                           transformOrigin: 'left'
                         }
-                      }}
+                      })}
                     >
                       Lizard
                     </Typography>
@@ -186,8 +186,8 @@ const MainInterfaceSlider: React.FC = () => {
                       component={motion.div}
                       variants={textVariants}
                       variant="body2"
-                      sx={{
-                        color: '#3f3d3d',
+                      sx={(theme) => ({
+                        color: theme.palette.text.secondary,
                         fontSize: {
                           xs: '0.800rem',  // Mobile
                           sm: '1rem',       // Tablet
@@ -211,7 +211,7 @@ const MainInterfaceSlider: React.FC = () => {
                           transform: 'translateY(-2px)',
                           transition: 'transform 0.3s ease'
                         }
-                      }}
+                      })}
                     >
                       Lizards are a widespread group of squamate reptiles, with over 6,000 species,
                       ranging across all continents except Antarctica
