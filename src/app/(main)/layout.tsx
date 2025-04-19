@@ -15,9 +15,7 @@ export default function MainLayout({
   console.log('Rendering ROOT layout');
  
   return (
-    <html lang="en">
-      
-      <body>
+    
         <StoreProvider>
           <Header />
 
@@ -50,7 +48,6 @@ export default function MainLayout({
           </Box>
           <BottomNavigationComponent />
         </StoreProvider>
-      </body>
-    </html>
+     
   );
 }
