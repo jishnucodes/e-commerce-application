@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Box,
   Typography,
@@ -25,6 +25,7 @@ import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import ShoppingBagOutlinedIcon from '@mui/icons-material/ShoppingBagOutlined';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import Link from 'next/link';
+import CartPageSkeleton from './loading';
 
 // Mock cart data
 const initialCartItems = [
@@ -55,9 +56,23 @@ const initialCartItems = [
 ];
 
 const CartPage = () => {
+  const [loading, setLoading] = useState(true);
   const [cartItems, setCartItems] = useState(initialCartItems);
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+
+  useEffect(() => {
+    // Simulate loading time
+    const timer = setTimeout(() => {
+      setLoading(false);
+    }, 2000);
+
+    return () => clearTimeout(timer);
+  }, []);
+
+  if (loading) {
+    return <CartPageSkeleton />;
+  }
 
   // Calculate subtotal
   const subtotal = cartItems.reduce((total, item) => total + (item.price * item.quantity), 0);
