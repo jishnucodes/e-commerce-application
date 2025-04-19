@@ -5,7 +5,7 @@ import ProductDisplaySection from "@/components/shop-page/product-display-sectio
 import { Box, Card, CardActionArea, CardMedia } from "@mui/material";
 import CategoriesSidebar from "@/components/shop-page/categories-sidebar/CategoriesSidebar";
 import CategoryPageSkeleton from "./loading";
-
+import Loading from "@/components/loading/Loading";
 const page = () => {
   const [loading, setLoading] = useState(true);
 
@@ -19,7 +19,10 @@ const page = () => {
   }, []);
 
   if (loading) {
-    return <CategoryPageSkeleton />;
+    return (<>
+    <Loading />
+    <CategoryPageSkeleton />
+    </>);
   }
 
   return (

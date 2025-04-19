@@ -25,7 +25,10 @@ import Rating from "@mui/material/Rating";
 import FeaturedProducts from "@/components/featured-products/FeaturedProducts";
 import ProductReviews from "@/components/reviews/ProductReviews";
 import ClientOnly from "@/components/ClientOnly";
-
+import ProductDetailsSkeleton from "./loading";
+import FavoriteIcon from "@mui/icons-material/Favorite";
+import { useRouter } from "next/navigation";
+import Loading from "@/components/loading/Loading";
 const products = [
   {
     name: "Plant Stand",
@@ -77,7 +80,7 @@ const SingleProductDetails = () => {
   const [activeTab, setActiveTab] = useState("description");
 
   const theme = useTheme();
-
+  const router = useRouter();
   useEffect(() => {
     // Simulate loading time
     const timer = setTimeout(() => {
@@ -88,7 +91,12 @@ const SingleProductDetails = () => {
   }, []);
 
   if (loading) {
-    return <ProductDetailsSkeleton />;
+    return (
+      <>
+      <Loading />
+      <ProductDetailsSkeleton />
+      </>
+    );
   }
 
   const handleQuantityChange = (type: "add" | "remove") => {
@@ -177,7 +185,7 @@ const SingleProductDetails = () => {
                   }}
                 >
                   <Image
-                    src="/backpacks.jpg"
+                    src="/headphones.jpg"
                     width={70}
                     height={70}
                     alt={`Thumbnail ${index + 1}`}
@@ -247,7 +255,13 @@ const SingleProductDetails = () => {
                 >
                   <RemoveIcon />
                 </IconButton>
-                <Typography variant="h6" sx={{ mx: 2 }}>
+                <Typography 
+                  variant="h6" 
+                  sx={(theme) => ({
+                    mx: 2,
+                    color: theme.palette.text.secondary,
+                  })}
+                >
                   {quantity}
                 </Typography>
                 <IconButton
@@ -257,24 +271,74 @@ const SingleProductDetails = () => {
                   <AddIcon />
                 </IconButton>
               </Box>
-              <Box>
-                {/* Add to Cart Button */}
+            
+            </Box>
+
+            {/* Button display */}
+            <Box sx={{
+                display: 'flex',
+                flexDirection: 'column',
+                gap: 2,
+                width: '100%',
+                // maxWidth: '500px',
+                marginTop: '20px',
+              }}>
                 <Button
                   variant="contained"
                   color="primary"
-                  size="large"
+                  fullWidth
                   startIcon={<ShoppingCartIcon />}
                   sx={{
-                    mt: 3,
+                    borderRadius: 2,
+                    textTransform: "none",
+                    fontSize: "1rem"
+                  }}
+                  onClick={() => {
+                    console.log("Add to Cart clicked");
+                    router.push("/cart");
+                  }}
+                >
+                  Add to Cart
+                </Button>
+
+                <Button
+                  variant="outlined"
+                  color="primary"
+                  fullWidth
+                  startIcon={<FavoriteIcon />}
+                  sx={{
+                    borderRadius: 2,
+                    textTransform: "none",
+                    fontSize: "1rem"
+                  }}
+                  onClick={() => {
+                    console.log("Add to Wishlist clicked");
+                    router.push("/wishlist");
+                  }}
+                >
+                  Add to Wishlist
+                </Button>
+
+                <Button
+                  variant="contained"
+                  fullWidth
+                  sx={{
                     borderRadius: 2,
                     textTransform: "none",
                     fontSize: "1rem",
+                    bgcolor: "#10B981",//green
+                    "&:hover": {
+                      bgcolor: "#059669"
+                    }
+                  }}
+                  onClick={() => {
+                    console.log("Buy Now clicked");
+                    router.push("/order");
                   }}
                 >
-                  Add to cart
+                  Buy Now
                 </Button>
               </Box>
-            </Box>
 
             {/* Apple Care Options */}
             <Typography variant="body1" fontWeight={500} sx={{ mt: 2 }}>
@@ -305,17 +369,29 @@ const SingleProductDetails = () => {
               }}
             >
               <Box>
-                <Typography variant="body1" fontWeight={500} sx={{ mt: 2 }}>
+                <Typography variant="body1" fontWeight={500} sx={(theme) => ({
+                  mt: 2,
+                  color: theme.palette.text.secondary,
+                })}
+                >
                   Sku:
                 </Typography>
               </Box>
               <Box>
-                <Typography variant="body1" fontWeight={500} sx={{ mt: 2 }}>
+                <Typography variant="body1" fontWeight={500} sx={(theme) => ({
+                  mt: 2,
+                  color: theme.palette.text.secondary,
+                })}
+                >
                   Categories:
                 </Typography>
               </Box>
               <Box>
-                <Typography variant="body1" fontWeight={500} sx={{ mt: 2 }}>
+                <Typography variant="body1" fontWeight={500} sx={(theme) => ({
+                  mt: 2,
+                  color: theme.palette.text.secondary,
+                })}
+                >
                   Share:
                 </Typography>
               </Box>
@@ -341,7 +417,11 @@ const SingleProductDetails = () => {
           />
         </Tabs>
         <TabPanel value={activeTab} index="description">
-          <Typography variant="body1" sx={{ mt: 2 }}>
+          <Typography variant="body1" sx={(theme) => ({
+            mt: 2,
+            color: theme.palette.text.secondary,
+          })}
+          >
             Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do
             eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim
             ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
@@ -349,7 +429,11 @@ const SingleProductDetails = () => {
           </Typography>
         </TabPanel>
         <TabPanel value={activeTab} index="specifications">
-          <Typography variant="body1" component="div" sx={{ mt: 2 }}>
+          <Typography variant="body1" component="div" sx={(theme) => ({
+            mt: 2,
+            color: theme.palette.text.secondary,
+          })}
+          >
             <ul>
               <li>Display: 6.1-inch Super Retina XDR display</li>
               <li>Processor: A15 Bionic chip</li>
