@@ -8,18 +8,19 @@ import ShoppingCartOutlinedIcon from '@mui/icons-material/ShoppingCartOutlined';
 import { AppDispatch } from "../../../../store";
 import { useDispatch } from "react-redux";
 import { showSidebar } from "@/slices/headerSlice";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+
 
 const SubHeader = () => {
-
   const dispatch: AppDispatch = useDispatch();
-
   const [isClicked, setIsClicked] = useState<boolean>(true);
 
+ 
   const handleMenuIconClick = () => {
     setIsClicked(!isClicked)
     dispatch(showSidebar(isClicked))
   }
+
   return (
     <Box
       sx={{

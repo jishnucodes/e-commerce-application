@@ -1,10 +1,9 @@
 "use client";
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Box,
   Typography,
-  Grid,
   Card,
   CardContent,
   CardActions,
@@ -17,12 +16,14 @@ import {
   useTheme,
   Tooltip,
 } from '@mui/material';
+import Grid from "@mui/material/Grid2";
 import Image from 'next/image';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import ShoppingCartOutlinedIcon from '@mui/icons-material/ShoppingCartOutlined';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import Link from 'next/link';
+import WishlistPageSkeleton from './loading';
 
 // Mock wishlist data
 const initialWishlistItems = [
@@ -53,9 +54,23 @@ const initialWishlistItems = [
 ];
 
 const WishlistPage = () => {
+  const [loading, setLoading] = useState(true);
   const [wishlistItems, setWishlistItems] = useState(initialWishlistItems);
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+
+  useEffect(() => {
+    // Simulate loading time
+    const timer = setTimeout(() => {
+      setLoading(false);
+    }, 2000);
+
+    return () => clearTimeout(timer);
+  }, []);
+
+  if (loading) {
+    return <WishlistPageSkeleton />;
+  }
 
   // Handle remove item
   const handleRemoveItem = (id: number) => {
@@ -99,7 +114,7 @@ const WishlistPage = () => {
       {wishlistItems.length > 0 ? (
         <Grid container spacing={3}>
           {wishlistItems.map((item) => (
-            <Grid item xs={12} sm={6} md={4} lg={3} key={item.id}>
+            <Grid size ={{xs:12,sm:6,md:4,lg:3}} key={item.id}>
               <Card 
                 sx={{ 
                   height: '100%', 

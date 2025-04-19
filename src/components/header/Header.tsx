@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useState, useEffect } from "react";
 import {
   AppBar,
   Box,
@@ -18,6 +18,7 @@ import {
   ListItemIcon,
   useTheme,
   Container,
+  Skeleton,
 } from "@mui/material";
 import Image from "next/image";
 import Searchbar from "./components/Searchbar";
@@ -37,11 +38,21 @@ import MobileViewTabs from "../mobile-view-tabs/MobileViewTabs";
 
 const Header = () => {
   const [mobileOpen, setMobileOpen] = React.useState(false);
+  const [loading, setLoading] = useState(true);
 
   const dispatch: AppDispatch = useDispatch();
   const { themeMode } = useSelector((state: RootState) => state.theme);
 
   const theme = useTheme();
+
+  useEffect(() => {
+    // Simulate loading time
+    const timer = setTimeout(() => {
+      setLoading(false);
+    }, 2000);
+
+    return () => clearTimeout(timer);
+  }, []);
 
   const handleDrawerToggle = () => {
     setMobileOpen((prevState) => !prevState);
@@ -99,45 +110,6 @@ const Header = () => {
       <Typography variant="body2" sx={{ mb: 1 }}>
         Select a option tab
       </Typography>
-      {/* <List sx={{ display: "flex", flexDirection: "column" }}>
-        {navItems.map((item) => (
-          <React.Fragment key={item.id}>
-            <ListItem sx={{}}>
-              {item.id === navItems[2].id ? (
-                <DropdownNavButton key={item.id} item={item} />
-              ) : (
-                <Button
-                  type="button"
-                  key={item.id}
-                  startIcon={
-                    item.id !== navItems[2].id && item.icon
-                      ? Array.isArray(item.icon)
-                        ? themeMode == "light"
-                          ? item.icon[1].icon
-                          : item.icon[0].icon
-                        : item.icon
-                      : null
-                  }
-                  sx={{
-                    ...theme.navFontStyles,
-                    color: "#424242",
-                  }}
-                >
-                  {item.id !== navItems[2].id && item.icon
-                    ? Array.isArray(item.icon)
-                      ? themeMode == "light"
-                        ? item.icon[1].label
-                        : item.icon[0].label
-                      : item.label
-                    : null}
-                </Button>
-              )}
-            </ListItem>
-
-            <Divider />
-          </React.Fragment>
-        ))}
-      </List> */}
       <Box>
         <Box>
           <MobileViewTabs />
@@ -145,6 +117,109 @@ const Header = () => {
       </Box>
     </Box>
   );
+
+  if (loading) {
+    return (
+      <Box sx={{ display: "flex", flexDirection: "column" }}>
+        {/* Top Navigation Skeleton */}
+        <Box sx={{ display: "flex", padding: "0px" }}>
+          <CssBaseline />
+          <Container>
+            <AppBar
+              component="nav"
+              sx={(theme) => ({
+                backgroundColor: theme.palette.background.default,
+                color: theme.palette.text.secondary,
+                padding: "0px",
+              })}
+            >
+              <Toolbar
+                sx={{
+                  height: "40px",
+                  minHeight: { xs: "40px", sm: "40px" },
+                  justifyContent: { sm: "space-between", md: "space-between" },
+                }}
+              >
+                <IconButton
+                  color="inherit"
+                  aria-label="open drawer"
+                  edge="start"
+                  onClick={handleDrawerToggle}
+                  sx={{ mr: 2, display: { md: "none" } }}
+                >
+                  <MenuIcon />
+                </IconButton>
+                <Skeleton
+                  variant="text"
+                  width={200}
+                  height={24}
+                  sx={{
+                    display: { xs: "none", sm: "none", md: "block" },
+                    fontSize: { md: "20px", lg: "20px" },
+                  }}
+                />
+                <Box sx={{ display: { xs: "none", sm: "none", md: "flex" }, gap: 2 }}>
+                  <Skeleton variant="text" width={70} height={24} />
+                  <Skeleton variant="text" width={90} height={24} />
+                  <Skeleton variant="text" width={60} height={24} />
+                </Box>
+              </Toolbar>
+              <Divider />
+              
+              {/* Subheader Skeleton */}
+              <Box sx={{ py: 1 }}>
+                <Box
+                  sx={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: 2,
+                    width: "100%",
+                    mb: 2,
+                  }}
+                >
+                  {/* Logo Section */}
+                  <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                    <Skeleton variant="rectangular" width={35} height={35} sx={{ borderRadius: 1 }} />
+                    <Skeleton variant="text" width={100} height={40} sx={{ fontSize: "24px" }} />
+                  </Box>
+
+                  {/* Search Bar */}
+                  <Box sx={{ flex: 1, mx: 2 }}>
+                    <Skeleton variant="rectangular" height={40} sx={{ width: "100%", borderRadius: 1 }} />
+                  </Box>
+
+                  {/* Cart Icon */}
+                  <Box>
+                    <Skeleton variant="circular" width={40} height={40} />
+                  </Box>
+                </Box>
+
+                {/* Categories Bar */}
+                <Box
+                  sx={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: 2,
+                    width: "100%",
+                    bgcolor: "background.paper",
+                    borderRadius: 1,
+                    border: 1,
+                    borderColor: "divider",
+                    p: 1,
+                  }}
+                >
+                  <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                    <Skeleton variant="rectangular" width={120} height={36} sx={{ borderRadius: 1 }} />
+                    <Skeleton variant="text" width={50} height={24} />
+                  </Box>
+                </Box>
+              </Box>
+            </AppBar>
+          </Container>
+        </Box>
+      </Box>
+    );
+  }
 
   return (
     <Box
@@ -231,9 +306,6 @@ const Header = () => {
                     )}
                   </React.Fragment>
                 ))}
-                {/* <Button onClick={() => dispatch(toggleTheme("light"))}>
-                  <DarkMode />
-                </Button> */}
               </Box>
             </Toolbar>
             <Divider />
@@ -247,7 +319,7 @@ const Header = () => {
             open={mobileOpen}
             onClose={handleDrawerToggle}
             ModalProps={{
-              keepMounted: true, // Better open performance on mobile.
+              keepMounted: true,
             }}
             sx={{
               display: { xs: "block", sm: "block", md: "none" },
@@ -263,9 +335,6 @@ const Header = () => {
           </Drawer>
         </nav>
       </Box>
-      {/* <Box sx={{position: 'absolute', top: '100px', width: "100%"}} component="div">
-      <SubHeader />
-      </Box> */}
     </Box>
   );
 };

@@ -1,16 +1,26 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import ProductDisplaySection from "@/components/shop-page/product-display-section/ProductDisplaySection";
 import { Box, Card, CardActionArea, CardMedia } from "@mui/material";
 import CategoriesSidebar from "@/components/shop-page/categories-sidebar/CategoriesSidebar";
-
-
-
-
+import CategoryPageSkeleton from "./loading";
 
 const page = () => {
+  const [loading, setLoading] = useState(true);
 
+  useEffect(() => {
+    // Simulate loading time
+    const timer = setTimeout(() => {
+      setLoading(false);
+    }, 2000);
+
+    return () => clearTimeout(timer);
+  }, []);
+
+  if (loading) {
+    return <CategoryPageSkeleton />;
+  }
 
   return (
     <Box
@@ -46,14 +56,13 @@ const page = () => {
               image={"/shopImg-1.png"}
               alt="green iguana"
               sx={{
-                width: { xs: "100%", sm: "100%", md: "100%" }, // Adjust the width as needed
+                width: { xs: "100%", sm: "100%", md: "100%" },
                 aspectRatio: { sx: "4/3", sm: "3/4", md: "3/4" },
                 objectFit: "cover",
                 padding: "10px",
                 borderRadius: "18px",
               }}
             />
-          
           </CardActionArea>
         </Card>
         <ProductDisplaySection />

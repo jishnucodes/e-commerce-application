@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Grid from "@mui/material/Grid2";
 import {
   Box,
@@ -23,6 +23,7 @@ import RemoveIcon from "@mui/icons-material/Remove";
 import Rating from "@mui/material/Rating";
 import FeaturedProducts from "@/components/featured-products/FeaturedProducts";
 import ProductReviews from "@/components/reviews/ProductReviews";
+import ProductDetailsSkeleton from "./loading";
   
 
 const products = [
@@ -73,10 +74,24 @@ const TabPanel = ({ children, value, index }: TabPanelProps) => {
 };
 
 const SingleProductDetails = () => {
+  const [loading, setLoading] = useState(true);
   const [quantity, setQuantity] = useState(1);
   const [selectedStyle, setSelectedStyle] = useState("green");
   const [appleCare, setAppleCare] = useState("without");
   const [activeTab, setActiveTab] = useState("description");
+
+  useEffect(() => {
+    // Simulate loading time
+    const timer = setTimeout(() => {
+      setLoading(false);
+    }, 2000);
+
+    return () => clearTimeout(timer);
+  }, []);
+
+  if (loading) {
+    return <ProductDetailsSkeleton />;
+  }
 
   const handleQuantityChange = (type: "add" | "remove") => {
     setQuantity((prev) =>
