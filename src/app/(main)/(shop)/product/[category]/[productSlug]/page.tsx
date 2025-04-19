@@ -15,6 +15,7 @@ import {
   Button,
   Tab,
   Tabs,
+  useTheme,
 } from "@mui/material";
 import Image from "next/image";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
@@ -23,7 +24,7 @@ import RemoveIcon from "@mui/icons-material/Remove";
 import Rating from "@mui/material/Rating";
 import FeaturedProducts from "@/components/featured-products/FeaturedProducts";
 import ProductReviews from "@/components/reviews/ProductReviews";
-  
+import ClientOnly from "@/components/ClientOnly";
 
 const products = [
   {
@@ -63,11 +64,7 @@ const TabPanel = ({ children, value, index }: TabPanelProps) => {
       id={`tabpanel-${index}`}
       aria-labelledby={`tab-${index}`}
     >
-      {value === index && (
-        <Box sx={{ p: 3, color: "black" }}>
-          {children}
-        </Box>
-      )}
+      {value === index && <Box sx={{ p: 3, color: "black" }}>{children}</Box>}
     </div>
   );
 };
@@ -78,16 +75,18 @@ const SingleProductDetails = () => {
   const [appleCare, setAppleCare] = useState("without");
   const [activeTab, setActiveTab] = useState("description");
 
+  const theme = useTheme();
+
   const handleQuantityChange = (type: "add" | "remove") => {
     setQuantity((prev) =>
       type === "add" ? prev + 1 : prev > 1 ? prev - 1 : 1
     );
   };
-  
+
   const handleTabChange = (event: React.SyntheticEvent, newValue: string) => {
     setActiveTab(newValue);
   };
-  
+
   const handleClick = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     event.preventDefault();
     console.info("You clicked a breadcrumb.");
@@ -182,8 +181,16 @@ const SingleProductDetails = () => {
 
             {/* Star Ratings */}
             <Box sx={{ display: "flex", alignItems: "center", mt: 1 }}>
-              <Rating name="read-only" value={4} readOnly size="small" />
-              <Typography variant="body2" sx={{ ml: 1 }}>
+              <ClientOnly>
+                <Rating name="read-only" value={4} readOnly size="small" />
+              </ClientOnly>
+              <Typography 
+                variant="body2" 
+                sx={(theme) => ({
+                  ml: 1,
+                  color: theme.palette.text.secondary,
+                })}
+              >
                 (1) reviews
               </Typography>
             </Box>
@@ -205,12 +212,19 @@ const SingleProductDetails = () => {
             </Typography>
 
             {/* Quantity Selector */}
-            <Box sx={{ display: "flex", alignItems: "center", justifyContent: 'space-between', mt: 2 }}>
+            <Box
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+                mt: 2,
+              }}
+            >
               <Box
-                component='div'
+                component="div"
                 sx={{
-                    display: 'flex',
-                    alignItems: 'center'
+                  display: "flex",
+                  alignItems: "center",
                 }}
               >
                 <IconButton
@@ -267,14 +281,14 @@ const SingleProductDetails = () => {
             </ToggleButtonGroup>
 
             {/* categories, share, compare */}
-            <Box 
-              sx={{ 
-                display: "flex", 
-                flexDirection: "column",  
-                alignItems: "start", 
-                justifyContent: 'space-between', 
-                mt: 2 
-                }}
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "start",
+                justifyContent: "space-between",
+                mt: 2,
+              }}
             >
               <Box>
                 <Typography variant="body1" fontWeight={500} sx={{ mt: 2 }}>
@@ -288,7 +302,7 @@ const SingleProductDetails = () => {
               </Box>
               <Box>
                 <Typography variant="body1" fontWeight={500} sx={{ mt: 2 }}>
-                Share:
+                  Share:
                 </Typography>
               </Box>
             </Box>
@@ -296,25 +310,28 @@ const SingleProductDetails = () => {
         </Grid>
       </Box>
       <Box component="div">
-        <Tabs 
-          value={activeTab} 
-          onChange={handleTabChange} 
-          sx={{ borderBottom: 1, borderColor: 'divider' }}
+        <Tabs
+          value={activeTab}
+          onChange={handleTabChange}
+          sx={{ borderBottom: 1, borderColor: "divider" }}
         >
-          <Tab 
-            label="Description" 
-            value="description" 
-            sx={{ textTransform: 'none' }}
+          <Tab
+            label="Description"
+            value="description"
+            sx={{ textTransform: "none" }}
           />
-          <Tab 
-            label="Specifications" 
-            value="specifications" 
-            sx={{ textTransform: 'none' }}
+          <Tab
+            label="Specifications"
+            value="specifications"
+            sx={{ textTransform: "none" }}
           />
         </Tabs>
         <TabPanel value={activeTab} index="description">
           <Typography variant="body1" sx={{ mt: 2 }}>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do
+            eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim
+            ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
+            aliquip ex ea commodo consequat.
           </Typography>
         </TabPanel>
         <TabPanel value={activeTab} index="specifications">
