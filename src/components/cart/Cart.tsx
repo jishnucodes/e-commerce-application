@@ -8,7 +8,7 @@ import Grid from '@mui/material/Grid2';
 import Image from 'next/image';
 
 const Cart = () => {
-    return (
+  return (
 
         <Grid container spacing={3}>
             {/* Cart Items Section */}
