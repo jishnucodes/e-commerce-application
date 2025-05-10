@@ -9,12 +9,12 @@ import { AppDispatch } from "../../../../store";
 import { useDispatch } from "react-redux";
 import { showSidebar } from "@/slices/headerSlice";
 import { useState, useEffect } from "react";
-
-
+import FavoriteBorderOutlinedIcon from '@mui/icons-material/FavoriteBorderOutlined';
+import { useRouter } from "next/navigation";
 const SubHeader = () => {
   const dispatch: AppDispatch = useDispatch();
   const [isClicked, setIsClicked] = useState<boolean>(true);
-
+  const router = useRouter();
  
   const handleMenuIconClick = () => {
     setIsClicked(!isClicked)
@@ -78,8 +78,23 @@ const SubHeader = () => {
         </Box>
 
         <Box sx={{ display: "flex", flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}>
-          <IconButton sx={{justifyItems: 'start'}}>
+          <IconButton 
+          sx={{justifyItems: 'start'}}
+          onClick={() => {
+            console.log("Add to Cart clicked");
+            router.push("/cart");
+          }}
+          >
             <ShoppingCartOutlinedIcon />
+          </IconButton>
+          <IconButton 
+          sx={{justifyItems: 'start'}}
+          onClick={() => {
+            console.log("Add to Cart clicked");
+            router.push("/wishlist");
+          }}
+          >
+            <FavoriteBorderOutlinedIcon />
           </IconButton>
         </Box>
       </Box>

@@ -199,13 +199,22 @@ const ProductReviews = () => {
             label="Your Review"
             value={newReview.comment}
             onChange={(e) => setNewReview({ ...newReview, comment: e.target.value })}
-            sx={{ mb: 2 }}
+            sx={(theme) => ({
+              mb: 2,
+              color: theme.palette.text.secondary,
+              "& .MuiInputBase-root": {
+                color: theme.palette.text.secondary,
+              },
+            })}
           />
           
           <Button 
             variant="contained" 
             type="submit"
-            sx={{ textTransform: 'none' }}
+            sx={(theme) => ({
+              textTransform: 'none',
+              color: theme.palette.text.secondary,
+            })}
           >
             Submit Review
           </Button>
@@ -234,7 +243,10 @@ const ProductReviews = () => {
                 
                 <Rating value={review.rating} readOnly size="small" sx={{ mb: 1 }} />
                 
-                <Typography variant="body1" paragraph>
+                <Typography variant="body1" sx={(theme) => ({
+                  color: theme.palette.text.secondary,
+                })}
+                >
                   {review.comment}
                 </Typography>
                 
@@ -246,7 +258,11 @@ const ProductReviews = () => {
                   >
                     {review.liked ? <ThumbUpIcon /> : <ThumbUpOutlinedIcon />}
                   </IconButton>
-                  <Typography variant="body2" sx={{ ml: 1 }}>
+                  <Typography variant="body2" sx={(theme) => ({
+                    ml: 1,
+                    color: theme.palette.text.tertiary,
+                  })}
+                  >
                     {review.likes} {review.likes === 1 ? 'person' : 'people'} found this helpful
                   </Typography>
                 </Box>

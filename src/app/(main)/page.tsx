@@ -20,6 +20,7 @@ import { useSelector } from "react-redux";
 import BottomNavigationComponent from "@/components/bottom-navigation/BottomNavigation";
 import { RootState } from "../../../store";
 import MainPageSkeleton from "@/components/skeleton/MainPageSkeleton";
+import Loading from "@/components/loading/Loading";
 import HeaderSlider from "@/components/HeaderSlider/HeaderSlider";
 export default function Home() {
   const { isSidebarOpen } = useSelector((state: RootState) => state.header);
@@ -38,7 +39,12 @@ export default function Home() {
   }, []);
 
   if (loading) {
-    return <MainPageSkeleton />;
+    return (
+      <>
+      <Loading />
+      <MainPageSkeleton />
+      </>
+    );
   }
 
   return (

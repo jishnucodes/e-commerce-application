@@ -58,18 +58,18 @@ const FeaturedProducts = () => {
       {/* 🛍 Suggested Products */}
       <Typography 
         variant="h6" 
-        sx={{ 
+        sx={(theme) => ({
             px: 2,
             fontFamily: "Copeland",
             fontWeight: "bold",
-            color: "black",
+            color: theme.palette.text.primary,
             mt: 2,
             fontSize: {
                 xs: '1.5rem',  // Mobile: ~28px
                 sm: '1.5rem',     // Tablet: ~32px
                 md: '1.5rem'    // Desktop: ~40px
             },
-        }}
+        })}
       >
         Suggested for You
     </Typography>
