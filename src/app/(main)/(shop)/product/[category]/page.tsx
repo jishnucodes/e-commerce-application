@@ -1,77 +1,67 @@
-"use client";
+import CategoryPageContent from "@/components/product/CategoryPageContent";
+import { notFound } from "next/navigation";
 
-import React, { useState, useEffect } from "react";
-import ProductDisplaySection from "@/components/shop-page/product-display-section/ProductDisplaySection";
-import { Box, Card, CardActionArea, CardMedia } from "@mui/material";
-import CategoriesSidebar from "@/components/shop-page/categories-sidebar/CategoriesSidebar";
-import CategoryPageSkeleton from "./loading";
-import Loading from "@/components/loading/Loading";
-const page = () => {
-  const [loading, setLoading] = useState(true);
+interface PageProps {
+  params: Promise<{
+    category: string;
+  }>;
+}
 
-  useEffect(() => {
-    // Simulate loading time
-    const timer = setTimeout(() => {
-      setLoading(false);
-    }, 2000);
+async function fetchCategories() {
+  try {
+    const baseUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api";
+    const res = await fetch(`${baseUrl}/category/list`, {
+      cache: "no-store",
+      next: { revalidate: 3600 }, // Revalidate every hour
+    });
 
-    return () => clearTimeout(timer);
-  }, []);
+    if (!res.ok) {
+      return null;
+    }
 
-  if (loading) {
-    return (<>
-    <Loading />
-    <CategoryPageSkeleton />
-    </>);
+    const categories = await res.json();
+    return categories;
+  } catch (error) {
+    console.error("Error fetching categories:", error);
+    return null;
+  }
+}
+
+async function fetchProductsBySlug(slug: string) {
+  try {
+    const baseUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api";
+    const res = await fetch(`${baseUrl}/product/list-by-slug/${slug}`, {
+      cache: "no-store",
+      next: { revalidate: 60 }, // Revalidate every 60 seconds
+    });
+
+    if (!res.ok) {
+      return null;
+    }
+
+    const products = await res.json();
+    return products;
+  } catch (error) {
+    console.error("Error fetching products:", error);
+    return null;
+  }
+}
+
+export default async function CategoryPage({ params }: PageProps) {
+  const { category: slug } = await params;
+
+  // Fetch data in parallel on the server
+  const [categories, products] = await Promise.all([
+    fetchCategories(),
+    fetchProductsBySlug(slug),
+  ]);
+
+  if (!categories || !categories.data) {
+    return notFound();
   }
 
-  return (
-    <Box
-      component="div"
-      sx={{
-        display: "flex",
-        flexDirection: "row",
-        gap: 1,
-        width: "100%",
-      }}
-    >
-      <Box
-        component="aside"
-        sx={{
-          width: { xs: "100%", sm: "30%", md: "25%" },
-          display: { xs: "none",sm: "none", md: "block" }
-        }}
-      >
-        <CategoriesSidebar />
-      </Box>
-      <Box component="div" sx={{ width: { xs: "100%", sm: "100%", md: "75%" } }}>
-        <Card sx={{ width: "100%", height: "460px", paddin: "opx" }}>
-          <CardActionArea
-            sx={{
-              display: "flex",
-              flexDirection: { xs: "column", sm: "column", md: "row" },
-              height: "100%",
-            }}
-          >
-            <CardMedia
-              component="img"
-              height="100%"
-              image={"/shopImg-1.png"}
-              alt="green iguana"
-              sx={{
-                width: { xs: "100%", sm: "100%", md: "100%" },
-                aspectRatio: { sx: "4/3", sm: "3/4", md: "3/4" },
-                objectFit: "cover",
-                padding: "10px",
-                borderRadius: "18px",
-              }}
-            />
-          </CardActionArea>
-        </Card>
-        <ProductDisplaySection />
-      </Box>
-    </Box>
-  );
-};
+  // If no products, still show the page but with empty products
+  const productsData = products || { status: true, message: "No products found", data: [] };
 
-export default page;
+  return <CategoryPageContent categories={categories} products={productsData} slug={slug} />;
+}

@@ -26,7 +26,7 @@ const MobileDrawableFilterComponent = ({
 }: MobileDrawableFilterComponentProps) => {
   const [rangeValue, setRangeValue] = useState<RangeValue>({
     minValue: 0,
-    maxValue: 7000,
+    maxValue: 0,
   });
 
   const handleSliderChange = (
@@ -133,7 +133,7 @@ const MobileDrawableFilterComponent = ({
                 aria-label="Default"
                 valueLabelDisplay="auto"
                 min={0}
-                max={7000}
+                max={0}
               />
             </Box>
             <Box
@@ -155,7 +155,7 @@ const MobileDrawableFilterComponent = ({
                 aria-label="Default"
                 valueLabelDisplay="auto"
                 min={0}
-                max={7000}
+                max={0}
               />
             </Box>
           </Box>

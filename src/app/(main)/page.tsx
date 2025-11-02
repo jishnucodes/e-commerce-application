@@ -22,21 +22,27 @@ import { RootState } from "../../../store";
 import MainPageSkeleton from "@/components/skeleton/MainPageSkeleton";
 import Loading from "@/components/loading/Loading";
 import HeaderSlider from "@/components/HeaderSlider/HeaderSlider";
+import { useApiCalls } from "@/hooks/useApiCalls";
 export default function Home() {
+  const { data: categories, loading, error, get } = useApiCalls();
   const { isSidebarOpen } = useSelector((state: RootState) => state.header);
-  const [loading, setLoading] = useState(true);
+  // const [loading, setLoading] = useState(true);
 
   const theme = useTheme();
   const isSmallScreen = useMediaQuery(theme.breakpoints.down("md"));
 
-  useEffect(() => {
-    // Simulate loading time
-    const timer = setTimeout(() => {
-      setLoading(false);
-    }, 2000);
+  // useEffect(() => {
+  //   // Simulate loading time
+  //   const timer = setTimeout(() => {
+  //     setLoading(false);
+  //   }, 2000);
 
-    return () => clearTimeout(timer);
-  }, []);
+  //   return () => clearTimeout(timer);
+  // }, []);
+
+  useEffect(() => {
+      get("/category/list");
+    }, []);
 
   if (loading) {
     return (
@@ -74,7 +80,7 @@ export default function Home() {
               height="495px"
             >
             
-                <Sidebar />
+                <Sidebar categories={categories} />
               
 
             </Box>

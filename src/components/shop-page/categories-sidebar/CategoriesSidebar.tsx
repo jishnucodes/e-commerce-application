@@ -10,41 +10,79 @@ import {
   List,
   ListItem,
   ListItemText,
+  Paper,
+  Popper,
   Slider,
   TextField,
   Typography,
   useMediaQuery,
   useTheme,
 } from "@mui/material";
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../../store";
 import Link from "next/link";
+import { useApiCalls } from "@/hooks/useApiCalls";
 
 type RangeValue = {
   minValue: number | string; // Allow string to handle empty input
   maxValue: number | string; // Allow string to handle empty input
 };
 
-const CategoriesSidebar = () => {
+type CategoriesSidebarProps = {
+  categories: any;
+  rangeValue: RangeValue;
+  setRangeValue: (value: RangeValue) => void;
+  maxPrice?: number;
+};
+
+const CategoriesSidebar = ({ categories, rangeValue, setRangeValue, maxPrice = 7000 }: CategoriesSidebarProps) => {
+  // const { data: categories, loading, error, get } = useApiCalls();
+
   const { isSidebarOpen } = useSelector((state: RootState) => state.header);
   const theme = useTheme();
   const isSmallScreen = useMediaQuery(theme.breakpoints.down("md"));
 
-  const [rangeValue, setRangeValue] = useState<RangeValue>({
-    minValue: 0,
-    maxValue: 7000,
-  });
+  // const [rangeValue, setRangeValue] = useState<RangeValue>({
+  //   minValue: 0,
+  //   maxValue: 7000,
+  // });
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const [hoveredCategory, setHoveredCategory] = useState<any>(null);
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+  // Fetch categories
+  // useEffect(() => {
+  //   get("/category/list");
+  // }, []);
+
+  // Hover Handlers
+  const handleMouseEnter = (
+    event: React.MouseEvent<HTMLElement>,
+    category: any
+  ) => {
+    if (timeoutRef.current) clearTimeout(timeoutRef.current);
+    setAnchorEl(event.currentTarget);
+    setHoveredCategory(category);
+  };
+
+  const handleMouseLeave = () => {
+    timeoutRef.current = setTimeout(() => {
+      setAnchorEl(null);
+      setHoveredCategory(null);
+    }, 300); // delay for smoother transition
+  };
 
   const handleSliderChange = (
     event: Event,
-    newValue: number | number[],
-    name: "minValue" | "maxValue"
+    newValue: number | number[]
   ) => {
-    setRangeValue((prevState) => ({
-      ...prevState,
-      [name]: newValue as number,
-    }));
+    if (Array.isArray(newValue)) {
+      setRangeValue({
+        minValue: newValue[0],
+        maxValue: newValue[1],
+      });
+    }
   };
 
   const handleTextFieldChange = (
@@ -54,10 +92,31 @@ const CategoriesSidebar = () => {
     const value = event.target.value;
 
     if (value === "" || !isNaN(Number(value))) {
-      setRangeValue((prevState) => ({
-        ...prevState,
-        [name]: value === "" ? "" : Number(value),
-      }));
+      const numValue = value === "" ? "" : Number(value);
+      
+      if (name === "minValue") {
+        // Ensure min doesn't exceed max
+        const maxVal = typeof rangeValue.maxValue === "number" ? rangeValue.maxValue : maxPrice;
+        const finalValue = numValue === "" || (typeof numValue === "number" && numValue <= maxVal) 
+          ? numValue 
+          : maxVal;
+        setRangeValue({
+          ...rangeValue,
+          minValue: finalValue,
+        });
+      } else {
+        // Ensure max doesn't go below min
+        const minVal = typeof rangeValue.minValue === "number" && rangeValue.minValue >= 0 
+          ? rangeValue.minValue 
+          : 0;
+        const finalValue = numValue === "" || (typeof numValue === "number" && numValue >= minVal)
+          ? numValue
+          : minVal;
+        setRangeValue({
+          ...rangeValue,
+          maxValue: finalValue === "" ? maxPrice : finalValue,
+        });
+      }
     }
   };
 
@@ -74,35 +133,78 @@ const CategoriesSidebar = () => {
         }}
       >
         <List>
-          {Categories.map((category) => (
-            <React.Fragment key={category.id}>
+          {categories?.data?.map((category: any) => (
             <ListItem
               key={category.id}
               component={Link}
               href={`/product/${category.slug}`}
-              sx={(theme) => ({
+              onMouseEnter={(e) => handleMouseEnter(e, category.subCategories)}
+              onMouseLeave={handleMouseLeave}
+              sx={{
                 fontFamily: "CaviarDreams_Bold",
                 color: theme.palette.text.secondary,
                 "&:hover": {
                   cursor: "pointer",
+                  backgroundColor: theme.palette.action.hover,
                 },
-              })}
+              }}
             >
               <ListItemText
-                primary={category.name}
-                sx={(theme) => ({
+                primary={category.categoryName}
+                sx={{
                   fontFamily: "CaviarDreams_Bold",
-                  "&:hover": {
-                    cursor: "pointer",
-                  },
                   color: theme.palette.text.secondary,
-                })}
+                }}
               />
             </ListItem>
-            <Divider />
-            </React.Fragment>
           ))}
         </List>
+
+        {/* Subcategory Popper */}
+      <Popper
+        open={Boolean(anchorEl && hoveredCategory)}
+        anchorEl={anchorEl}
+        placement="right-start"
+        sx={{ zIndex: 1300 }}
+      >
+        <Paper
+          onMouseEnter={() => {
+            if (timeoutRef.current) clearTimeout(timeoutRef.current);
+          }}
+          onMouseLeave={handleMouseLeave}
+          sx={{
+            p: 2,
+            boxShadow: theme.shadows[4],
+            ml: 1,
+          }}
+        >
+          <List>
+            {hoveredCategory?.map((subCategory: any) => (
+              <ListItem
+                key={subCategory.id}
+                component={Link}
+                href={`/product/${subCategory.slug}`}
+                sx={{
+                  fontFamily: "CaviarDreams_Bold",
+                  color: theme.palette.text.secondary,
+                  "&:hover": {
+                    cursor: "pointer",
+                    backgroundColor: theme.palette.action.hover,
+                  },
+                }}
+              >
+                <ListItemText
+                  primary={subCategory.subCategoryName}
+                  sx={{
+                    fontFamily: "CaviarDreams_Bold",
+                    color: theme.palette.text.secondary,
+                  }}
+                />
+              </ListItem>
+            ))}
+          </List>
+        </Paper>
+      </Popper>
 
         {/* Filters section */}
         <Box
@@ -112,7 +214,7 @@ const CategoriesSidebar = () => {
           }}
         >
           <Box component="div" mt={2}>
-            <Typography 
+            <Typography
               variant="h5"
               sx={(theme) => ({
                 color: theme.palette.text.secondary,
@@ -149,75 +251,46 @@ const CategoriesSidebar = () => {
               overflow: "hidden",
             })}
           >
+            {/* Range Slider */}
             <Box
               component="div"
-              sx={(theme) => ({
+              sx={{
                 width: "100%",
-                display: "flex",
-                flexDirection: "row",
-                justifyContent: "space-between",
-                alignItems: "center",
-                gap: 2,
-              })}
+                px: 1,
+              }}
             >
-              <Box
-                component="div"
+              <Slider
+                value={[
+                  typeof rangeValue.minValue === "number" && rangeValue.minValue >= 0
+                    ? rangeValue.minValue
+                    : 0,
+                  typeof rangeValue.maxValue === "number" && rangeValue.maxValue > 0
+                    ? rangeValue.maxValue
+                    : maxPrice,
+                ]}
+                onChange={(e, newValue) => handleSliderChange(e, newValue)}
+                valueLabelDisplay="auto"
+                valueLabelFormat={(value) => `₹${value}`}
+                min={0}
+                max={maxPrice}
                 sx={(theme) => ({
-                  width: "100%",
+                  color: theme.palette.primary.main,
+                  "& .MuiSlider-thumb": {
+                    width: 20,
+                    height: 20,
+                    "&:hover": {
+                      boxShadow: `0 0 0 8px ${theme.palette.primary.main}22`,
+                    },
+                  },
+                  "& .MuiSlider-track": {
+                    height: 4,
+                  },
+                  "& .MuiSlider-rail": {
+                    height: 4,
+                    opacity: 0.3,
+                  },
                 })}
-              >
-                <Typography 
-                  variant="body2"
-                  sx={(theme) => ({
-                    color: theme.palette.text.secondary,
-                  })}
-                >
-                  Min Price
-                </Typography>
-                <Slider
-                  value={
-                    typeof rangeValue.minValue === "number"
-                      ? rangeValue.minValue
-                      : 0
-                  }
-                  onChange={(e, newValue) =>
-                    handleSliderChange(e, newValue, "minValue")
-                  }
-                  aria-label="Default"
-                  valueLabelDisplay="auto"
-                  min={0}
-                  max={7000}
-                />
-              </Box>
-              <Box
-                component="div"
-                sx={(theme) => ({
-                  width: "100%",
-                })}
-              >
-                <Typography 
-                  variant="body2"
-                  sx={(theme) => ({
-                    color: theme.palette.text.secondary,
-                  })}
-                >
-                  Max Price 
-                </Typography>
-                <Slider
-                  value={
-                    typeof rangeValue.maxValue === "number"
-                      ? rangeValue.maxValue
-                      : 0
-                  }
-                  onChange={(e, newValue) =>
-                    handleSliderChange(e, newValue, "maxValue")
-                  }
-                  aria-label="Default"
-                  valueLabelDisplay="auto"
-                  min={0}
-                  max={7000}
-                />
-              </Box>
+              />
             </Box>
             <Box
               component="div"
@@ -226,73 +299,108 @@ const CategoriesSidebar = () => {
                 display: "flex",
                 flexDirection: "row",
                 justifyContent: "space-between",
-                alignItems: "center",
-                gap: 2,
+                alignItems: "flex-start",
+                gap: 1.5,
+                mt: 1,
               })}
             >
               <Box
                 component="div"
-                sx={(theme) => ({
+                sx={{
+                  flex: 1,
                   display: "flex",
-                  flexDirection: "row",
-                  alignItems: "center",
-                  gap: 2,
-                })}
+                  flexDirection: "column",
+                  gap: 0.5,
+                }}
               >
+                <Typography
+                  variant="caption"
+                  sx={(theme) => ({
+                    color: theme.palette.text.secondary,
+                    fontSize: "0.75rem",
+                    opacity: 0.8,
+                  })}
+                >
+                  Min
+                </Typography>
                 <TextField
                   variant="outlined"
                   size="small"
                   value={rangeValue.minValue}
                   onChange={(e) => handleTextFieldChange(e, "minValue")}
+                  placeholder="0"
+                  inputProps={{
+                    inputMode: "numeric",
+                    pattern: "[0-9]*",
+                  }}
                   sx={(theme) => ({
                     width: "100%",
-                    color: theme.palette.text.secondary,
                     "& .MuiInputBase-input": {
-                      color: theme.palette.text.secondary
-                    }
+                      color: theme.palette.text.secondary,
+                      fontSize: "0.875rem",
+                      py: 1,
+                    },
+                    "& .MuiOutlinedInput-root": {
+                      backgroundColor: theme.palette.mode === 'dark' 
+                        ? 'rgba(255, 255, 255, 0.05)' 
+                        : 'rgba(0, 0, 0, 0.02)',
+                    },
                   })}
                 />
               </Box>
-              <Typography 
+              <Typography
                 variant="body2"
                 sx={(theme) => ({
                   color: theme.palette.text.secondary,
+                  mt: 3.5,
+                  opacity: 0.7,
                 })}
               >
                 to
               </Typography>
               <Box
                 component="div"
-                sx={(theme) => ({
+                sx={{
+                  flex: 1,
                   display: "flex",
-                  flexDirection: "row",
-                  alignItems: "center",
-                  gap: 2,
-                })}
+                  flexDirection: "column",
+                  gap: 0.5,
+                }}
               >
-                <TextField
-                  variant="outlined" 
-                  size="small"
-                  value={rangeValue.maxValue}
-                  onChange={(e) => handleTextFieldChange(e, "maxValue")}
+                <Typography
+                  variant="caption"
                   sx={(theme) => ({
-                    width: "100%",
                     color: theme.palette.text.secondary,
-                    "& .MuiInputBase-input": {
-                      color: theme.palette.text.secondary
-                    }
+                    fontSize: "0.75rem",
+                    opacity: 0.8,
                   })}
-                />
-                {/* <TextField
+                >
+                  Max
+                </Typography>
+                <TextField
                   variant="outlined"
                   size="small"
                   value={rangeValue.maxValue}
                   onChange={(e) => handleTextFieldChange(e, "maxValue")}
+                  placeholder={maxPrice.toString()}
+                  inputProps={{
+                    inputMode: "numeric",
+                    pattern: "[0-9]*",
+                  }}
                   sx={(theme) => ({
-                    color: theme.palette.text.secondary,
-
+                    width: "100%",
+                    "& .MuiInputBase-input": {
+                      color: theme.palette.text.secondary,
+                      fontSize: "0.875rem",
+                      py: 1,
+                    },
+                    "& .MuiOutlinedInput-root": {
+                      backgroundColor: theme.palette.mode === 'dark' 
+                        ? 'rgba(255, 255, 255, 0.05)' 
+                        : 'rgba(0, 0, 0, 0.02)',
+                    },
                   })}
-                /> */}
+                />
               </Box>
             </Box>
           </Box>
@@ -303,11 +411,8 @@ const CategoriesSidebar = () => {
             padding: "8px 16px",
           })}
         >
-          <Box 
-            component="div"
-            mt={2}
-          >
-            <Typography 
+          <Box component="div" mt={2}>
+            <Typography
               variant="h5"
               sx={(theme) => ({
                 color: theme.palette.text.secondary,
@@ -322,13 +427,13 @@ const CategoriesSidebar = () => {
             }}
           />
         </Box>
-        <Box 
+        <Box
           component="div"
           sx={(theme) => ({
             padding: "8px 16px",
-            display: 'flex',
-            flexDirection: 'column',
-            gap: 1
+            display: "flex",
+            flexDirection: "column",
+            gap: 1,
           })}
         >
           <Card sx={{ display: "flex" }}>
@@ -375,20 +480,20 @@ const CategoriesSidebar = () => {
               </CardContent>
             </Box>
           </Card>
-          <Box 
-            component='div'
+          <Box
+            component="div"
             sx={{
-              display: 'flex',
-              justifyContent: 'end'
+              display: "flex",
+              justifyContent: "end",
             }}
           >
-            <Typography 
+            <Typography
               variant="body2"
               sx={{
-                fontStyle: 'italic',
-                '&:hover': {
-                  cursor: 'pointer'
-                }
+                fontStyle: "italic",
+                "&:hover": {
+                  cursor: "pointer",
+                },
               }}
             >
               More

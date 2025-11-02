@@ -103,11 +103,20 @@ const Header = () => {
   const drawerWidth = "400px";
 
   const drawer = (
-    <Box onClick={handleDrawerToggle} sx={{ textAlign: "center" }}>
-      <Typography variant="h6" sx={{ my: 1 }}>
+    <Box onClick={handleDrawerToggle} 
+      sx={(theme) => ({ 
+        textAlign: "center", 
+        backgroundColor: theme.palette.background.paper, 
+        height: "100%",
+        padding: "16px",
+        borderRadius: "16px",
+        boxShadow: theme.shadows[2],
+      })}
+    >
+      <Typography variant="h6" sx={(theme) => ({ my: 1, color: theme.palette.text.secondary })}>
         Main Menu
       </Typography>
-      <Typography variant="body2" sx={{ mb: 1 }}>
+      <Typography variant="body2" sx={(theme) => ({ mb: 1, color: theme.palette.text.secondary })}>
         Select a option tab
       </Typography>
       <Box>
