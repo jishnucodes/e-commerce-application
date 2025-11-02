@@ -11,7 +11,7 @@ export const useApiCalls = <T = any>() => {
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
 
-  const baseUrl = "http://localhost:8000/api";
+  const baseUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api";
 
   const request = useCallback(
     async (
