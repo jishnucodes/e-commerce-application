@@ -25,6 +25,8 @@ import ProductReviews from "@/components/reviews/ProductReviews";
 import ClientOnly from "@/components/ClientOnly";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import { useRouter } from "next/navigation";
+import { useApiCalls } from "@/hooks/useApiCalls";
+import { checkAuthStatus } from "@/common/utils";
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -65,12 +67,15 @@ interface ProductDetailsProps {
 
 const ProductDetails = ({ product }: ProductDetailsProps) => {
   const router = useRouter();
+  const { post: checkAuth } = useApiCalls();
 
   const [quantity, setQuantity] = useState(1);
   const [activeTab, setActiveTab] = useState("description");
   const [mainImage, setMainImage] = useState<string>("");
   const [selectedVariant, setSelectedVariant] = useState<any>(null);
-  const [selectedAttributes, setSelectedAttributes] = useState<Record<string, string>>({});
+  const [selectedAttributes, setSelectedAttributes] = useState<
+    Record<string, string>
+  >({});
 
   const theme = useTheme();
 
@@ -94,7 +99,7 @@ const ProductDetails = ({ product }: ProductDetailsProps) => {
     if (product?.data?.variants && product.data.variants.length > 0) {
       const firstVariant = product.data.variants[0];
       const initialAttributes: Record<string, string> = {};
-      
+
       // Set initial attributes from first variant (ALL attributes, not just varying ones)
       // Use normalized attribute names
       if (firstVariant.attributes && firstVariant.attributes.length > 0) {
@@ -102,7 +107,7 @@ const ProductDetails = ({ product }: ProductDetailsProps) => {
           initialAttributes[normalizeAttributeName(attr.name)] = attr.value;
         });
       }
-      
+
       console.log("Initializing with attributes:", initialAttributes);
       setSelectedAttributes(initialAttributes);
       setSelectedVariant(firstVariant);
@@ -111,13 +116,17 @@ const ProductDetails = ({ product }: ProductDetailsProps) => {
 
   // Update selected variant when attributes change
   useEffect(() => {
-    if (product?.data?.variants && product.data.variants.length > 0 && Object.keys(selectedAttributes).length > 0) {
+    if (
+      product?.data?.variants &&
+      product.data.variants.length > 0 &&
+      Object.keys(selectedAttributes).length > 0
+    ) {
       console.log("Searching for variant with attributes:", selectedAttributes);
-      
+
       const matchingVariant = product.data.variants.find((variant: any) => {
         return doesVariantMatchAttributes(variant, selectedAttributes);
       });
-      
+
       if (matchingVariant) {
         console.log("Found matching variant:", matchingVariant);
         console.log("Variant price:", matchingVariant.price);
@@ -125,12 +134,18 @@ const ProductDetails = ({ product }: ProductDetailsProps) => {
         // Reset quantity to 1 when variant changes (in case new variant has less stock)
         setQuantity(1);
       } else {
-        console.log("No matching variant found for attributes:", selectedAttributes);
-        console.log("Available variants:", product.data.variants.map((v: any) => ({
-          id: v.id,
-          attributes: v.attributes,
-          price: v.price
-        })));
+        console.log(
+          "No matching variant found for attributes:",
+          selectedAttributes
+        );
+        console.log(
+          "Available variants:",
+          product.data.variants.map((v: any) => ({
+            id: v.id,
+            attributes: v.attributes,
+            price: v.price,
+          }))
+        );
       }
     }
   }, [selectedAttributes, product?.data?.variants]);
@@ -171,10 +186,10 @@ const ProductDetails = ({ product }: ProductDetailsProps) => {
     if (!product?.data?.variants.length) return [];
     const values = new Set<string>();
     const normalizedAttrName = normalizeAttributeName(attributeName);
-    
+
     product.data.variants.forEach((variant: any) => {
-      const attr = variant.attributes?.find((a: any) => 
-        normalizeAttributeName(a.name) === normalizedAttrName
+      const attr = variant.attributes?.find(
+        (a: any) => normalizeAttributeName(a.name) === normalizedAttrName
       );
       if (attr) {
         values.add(attr.value);
@@ -186,9 +201,10 @@ const ProductDetails = ({ product }: ProductDetailsProps) => {
   // Get attribute names that have different values across variants (only show varying attributes)
   // Uses normalized attribute names
   const getAttributeNames = () => {
-    if (!product?.data?.variants || product.data.variants.length === 0) return [];
+    if (!product?.data?.variants || product.data.variants.length === 0)
+      return [];
     const attributeValueMap = new Map<string, Set<string>>();
-    
+
     // Collect all unique values for each attribute (using normalized names)
     product.data.variants.forEach((variant: any) => {
       variant.attributes?.forEach((attr: any) => {
@@ -199,7 +215,7 @@ const ProductDetails = ({ product }: ProductDetailsProps) => {
         attributeValueMap.get(normalizedName)?.add(attr.value);
       });
     });
-    
+
     // Only return attributes that have more than one unique value (varying attributes)
     const varyingAttributes: string[] = [];
     attributeValueMap.forEach((values, attributeName) => {
@@ -207,66 +223,86 @@ const ProductDetails = ({ product }: ProductDetailsProps) => {
         varyingAttributes.push(attributeName);
       }
     });
-    
+
     return varyingAttributes;
   };
 
   // Helper function to check if a variant matches given attributes
   // Uses normalized attribute names for comparison
-  const doesVariantMatchAttributes = (variant: any, attributes: Record<string, string>) => {
+  const doesVariantMatchAttributes = (
+    variant: any,
+    attributes: Record<string, string>
+  ) => {
     if (!variant.attributes || variant.attributes.length === 0) return false;
     if (Object.keys(attributes).length === 0) return false;
-    
+
     // Normalize all attribute names for comparison
     const normalizedAttributes: Record<string, string> = {};
-    Object.keys(attributes).forEach(key => {
+    Object.keys(attributes).forEach((key) => {
       normalizedAttributes[normalizeAttributeName(key)] = attributes[key];
     });
-    
+
     // Check that every attribute in the variant has a matching value in provided attributes
     const allVariantAttrsMatch = variant.attributes.every((attr: any) => {
       const normalizedAttrName = normalizeAttributeName(attr.name);
       return normalizedAttributes[normalizedAttrName] === attr.value;
     });
-    
+
     // Check that all provided attributes are present in the variant with matching values
-    const allProvidedAttrsMatch = Object.keys(normalizedAttributes).every((key) => {
-      const variantAttr = variant.attributes.find((attr: any) => 
-        normalizeAttributeName(attr.name) === key
-      );
-      return variantAttr !== undefined && variantAttr.value === normalizedAttributes[key];
-    });
-    
+    const allProvidedAttrsMatch = Object.keys(normalizedAttributes).every(
+      (key) => {
+        const variantAttr = variant.attributes.find(
+          (attr: any) => normalizeAttributeName(attr.name) === key
+        );
+        return (
+          variantAttr !== undefined &&
+          variantAttr.value === normalizedAttributes[key]
+        );
+      }
+    );
+
     // Also check that we have the same number of attributes (exact match)
-    const sameAttributeCount = variant.attributes.length === Object.keys(normalizedAttributes).length;
-    
+    const sameAttributeCount =
+      variant.attributes.length === Object.keys(normalizedAttributes).length;
+
     return allVariantAttrsMatch && allProvidedAttrsMatch && sameAttributeCount;
   };
 
   // Check if a variant exists and is in stock for given attributes
-  const isVariantAvailable = (attributeName: string, attributeValue: string) => {
-    if (!product?.data?.variants || product.data.variants.length === 0) return false;
-    
+  const isVariantAvailable = (
+    attributeName: string,
+    attributeValue: string
+  ) => {
+    if (!product?.data?.variants || product.data.variants.length === 0)
+      return false;
+
     const normalizedAttrName = normalizeAttributeName(attributeName);
-    const testAttributes = { ...selectedAttributes, [normalizedAttrName]: attributeValue };
-    
+    const testAttributes = {
+      ...selectedAttributes,
+      [normalizedAttrName]: attributeValue,
+    };
+
     const matchingVariant = product.data.variants.find((variant: any) => {
       return doesVariantMatchAttributes(variant, testAttributes);
     });
-    
+
     return matchingVariant && matchingVariant.inventory?.quantity > 0;
   };
-  
+
   // Check if there's ANY variant with this attribute value (for smart selection)
-  const hasVariantWithAttributeValue = (attributeName: string, attributeValue: string) => {
-    if (!product?.data?.variants || product.data.variants.length === 0) return false;
-    
+  const hasVariantWithAttributeValue = (
+    attributeName: string,
+    attributeValue: string
+  ) => {
+    if (!product?.data?.variants || product.data.variants.length === 0)
+      return false;
+
     const normalizedAttrName = normalizeAttributeName(attributeName);
-    
+
     return product.data.variants.some((variant: any) => {
       if (!variant.attributes || variant.attributes.length === 0) return false;
-      const attr = variant.attributes.find((a: any) => 
-        normalizeAttributeName(a.name) === normalizedAttrName
+      const attr = variant.attributes.find(
+        (a: any) => normalizeAttributeName(a.name) === normalizedAttrName
       );
       return attr && attr.value === attributeValue;
     });
@@ -274,12 +310,16 @@ const ProductDetails = ({ product }: ProductDetailsProps) => {
 
   // Check if variant combination exists (regardless of stock)
   const isVariantExists = (attributeName: string, attributeValue: string) => {
-    if (!product?.data?.variants || product.data.variants.length === 0) return false;
-    
+    if (!product?.data?.variants || product.data.variants.length === 0)
+      return false;
+
     const normalizedAttrName = normalizeAttributeName(attributeName);
     // Create test attributes with the new value (using normalized name)
-    const testAttributes = { ...selectedAttributes, [normalizedAttrName]: attributeValue };
-    
+    const testAttributes = {
+      ...selectedAttributes,
+      [normalizedAttrName]: attributeValue,
+    };
+
     // Check if there's a variant that matches all test attributes
     return product.data.variants.some((variant: any) => {
       return doesVariantMatchAttributes(variant, testAttributes);
@@ -287,38 +327,51 @@ const ProductDetails = ({ product }: ProductDetailsProps) => {
   };
 
   // Handle attribute selection with smart auto-selection of other attributes
-  const handleAttributeSelect = (attributeName: string, attributeValue: string) => {
+  const handleAttributeSelect = (
+    attributeName: string,
+    attributeValue: string
+  ) => {
     console.log(`Selecting ${attributeName}: ${attributeValue}`);
     console.log("Current selectedAttributes before:", selectedAttributes);
-    
+
     if (!product?.data?.variants || product.data.variants.length === 0) return;
-    
+
     const normalizedAttrName = normalizeAttributeName(attributeName);
-    
+
     // First, try to find a variant that matches current selection with new attribute
     // Use normalized name for the test attributes
-    const testAttributes = { ...selectedAttributes, [normalizedAttrName]: attributeValue };
+    const testAttributes = {
+      ...selectedAttributes,
+      [normalizedAttrName]: attributeValue,
+    };
     let matchingVariant = product.data.variants.find((variant: any) => {
       return doesVariantMatchAttributes(variant, testAttributes);
     });
-    
+
     // If no exact match, find ANY variant with this attribute value and use its other attributes
     if (!matchingVariant) {
-      console.log("No exact match found, looking for any variant with this attribute value...");
+      console.log(
+        "No exact match found, looking for any variant with this attribute value..."
+      );
       matchingVariant = product.data.variants.find((variant: any) => {
-        if (!variant.attributes || variant.attributes.length === 0) return false;
-        const attr = variant.attributes.find((a: any) => 
-          normalizeAttributeName(a.name) === normalizedAttrName
+        if (!variant.attributes || variant.attributes.length === 0)
+          return false;
+        const attr = variant.attributes.find(
+          (a: any) => normalizeAttributeName(a.name) === normalizedAttrName
         );
         return attr && attr.value === attributeValue;
       });
-      
+
       if (matchingVariant) {
-        console.log("Found compatible variant, auto-selecting all attributes:", matchingVariant);
+        console.log(
+          "Found compatible variant, auto-selecting all attributes:",
+          matchingVariant
+        );
         // Build attributes from the found variant
         const autoSelectedAttributes: Record<string, string> = {};
         matchingVariant.attributes.forEach((attr: any) => {
-          autoSelectedAttributes[normalizeAttributeName(attr.name)] = attr.value;
+          autoSelectedAttributes[normalizeAttributeName(attr.name)] =
+            attr.value;
         });
         console.log("Auto-selected attributes:", autoSelectedAttributes);
         setSelectedAttributes(autoSelectedAttributes);
@@ -328,7 +381,7 @@ const ProductDetails = ({ product }: ProductDetailsProps) => {
         return;
       }
     }
-    
+
     // If we found a matching variant with exact match, update attributes
     if (matchingVariant) {
       console.log("Exact match found:", matchingVariant);
@@ -357,7 +410,22 @@ const ProductDetails = ({ product }: ProductDetailsProps) => {
       maximumFractionDigits: 0,
     }).format(numPrice);
   };
-  
+
+  const handleAddToWishlist = async () => {
+    // Since cookies are HttpOnly, we can't read them client-side
+    // Check auth status by making an API call (cookies sent automatically)
+    const isAuthenticated = await checkAuthStatus(() =>
+      checkAuth("/user/refreshToken", {})
+    );
+
+    if (!isAuthenticated) {
+      // Not authenticated, redirect to login
+      router.push("/login");
+    } else {
+      router.push("/wishlist");
+    }
+  };
+
   return (
     <Box component="div">
       <Box component="div">
@@ -398,15 +466,15 @@ const ProductDetails = ({ product }: ProductDetailsProps) => {
                   src={mainImage}
                   width={250}
                   height={250}
-                    alt="Main Image"
-                    style={{ maxWidth: "100%", height: "auto" }}
-                  />
-                </Box>
-              ) : (
-                <Box>
-                  <Typography>No image found</Typography>
-                </Box>
-              )}
+                  alt="Main Image"
+                  style={{ maxWidth: "100%", height: "auto" }}
+                />
+              </Box>
+            ) : (
+              <Box>
+                <Typography>No image found</Typography>
+              </Box>
+            )}
 
             {/* 📌 Thumbnail Images */}
             <Box
@@ -476,74 +544,93 @@ const ProductDetails = ({ product }: ProductDetailsProps) => {
             {getAttributeNames().map((attrName) => {
               const normalizedAttrName = normalizeAttributeName(attrName);
               return (
-              <Box key={attrName} sx={{ mt: 3 }}>
-                <Typography
-                  variant="body1"
-                  fontWeight={500}
-                  sx={{ mb: 1, textTransform: "capitalize" }}
-                >
-                  {attrName}:
+                <Box key={attrName} sx={{ mt: 3 }}>
                   <Typography
-                    component="span"
-                    sx={{
-                      ml: 1,
-                      color: "primary.main",
-                      fontWeight: 600,
-                    }}
+                    variant="body1"
+                    fontWeight={500}
+                    sx={{ mb: 1, textTransform: "capitalize" }}
                   >
-                    {selectedAttributes[normalizedAttrName]}
+                    {attrName}:
+                    <Typography
+                      component="span"
+                      sx={{
+                        ml: 1,
+                        color: "primary.main",
+                        fontWeight: 600,
+                      }}
+                    >
+                      {selectedAttributes[normalizedAttrName]}
+                    </Typography>
                   </Typography>
-                </Typography>
-                <Stack direction="row" spacing={1} flexWrap="wrap" useFlexGap>
-                  {getUniqueAttributeValues(attrName).map((value) => {
-                    const normalizedAttrName = normalizeAttributeName(attrName);
-                    const isSelected = selectedAttributes[normalizedAttrName] === value;
-                    const hasVariant = hasVariantWithAttributeValue(attrName, value);
-                    
-                    // Find the variant with this attribute value to check stock
-                    let variantWithThisValue: any = null;
-                    if (hasVariant) {
-                      variantWithThisValue = product.data.variants.find((variant: any) => {
-                        if (!variant.attributes || variant.attributes.length === 0) return false;
-                        const attr = variant.attributes.find((a: any) => 
-                          normalizeAttributeName(a.name) === normalizedAttrName
-                        );
-                        return attr && attr.value === value;
-                      });
-                    }
-                    
-                    const isInStock = variantWithThisValue && variantWithThisValue.inventory?.quantity > 0;
-                    // Allow clicking if there's any variant with this value (even if out of stock, smart selection will handle it)
-                    const isDisabled = !hasVariant;
-                    
-                    return (
-                      <Chip
-                        key={value}
-                        label={value}
-                        onClick={() => {
-                          if (!isDisabled) {
-                            console.log(`Chip clicked: ${attrName} = ${value}`);
-                            handleAttributeSelect(attrName, value);
-                          } else {
-                            console.log(`Chip disabled: ${attrName} = ${value}, hasVariant: ${hasVariant}`);
+                  <Stack direction="row" spacing={1} flexWrap="wrap" useFlexGap>
+                    {getUniqueAttributeValues(attrName).map((value) => {
+                      const normalizedAttrName =
+                        normalizeAttributeName(attrName);
+                      const isSelected =
+                        selectedAttributes[normalizedAttrName] === value;
+                      const hasVariant = hasVariantWithAttributeValue(
+                        attrName,
+                        value
+                      );
+
+                      // Find the variant with this attribute value to check stock
+                      let variantWithThisValue: any = null;
+                      if (hasVariant) {
+                        variantWithThisValue = product.data.variants.find(
+                          (variant: any) => {
+                            if (
+                              !variant.attributes ||
+                              variant.attributes.length === 0
+                            )
+                              return false;
+                            const attr = variant.attributes.find(
+                              (a: any) =>
+                                normalizeAttributeName(a.name) ===
+                                normalizedAttrName
+                            );
+                            return attr && attr.value === value;
                           }
-                        }}
-                        variant={isSelected ? "filled" : "outlined"}
-                        color={isSelected ? "primary" : "default"}
-                        sx={{
-                          cursor: isDisabled ? "not-allowed" : "pointer",
-                          opacity: isDisabled ? 0.3 : (isInStock ? 1 : 0.6),
-                          "&:hover": {
-                            opacity: isDisabled ? 0.3 : 0.8,
-                          },
-                          textTransform: "capitalize",
-                        }}
-                        disabled={isDisabled}
-                      />
-                    );
-                  })}
-                </Stack>
-              </Box>
+                        );
+                      }
+
+                      const isInStock =
+                        variantWithThisValue &&
+                        variantWithThisValue.inventory?.quantity > 0;
+                      // Allow clicking if there's any variant with this value (even if out of stock, smart selection will handle it)
+                      const isDisabled = !hasVariant;
+
+                      return (
+                        <Chip
+                          key={value}
+                          label={value}
+                          onClick={() => {
+                            if (!isDisabled) {
+                              console.log(
+                                `Chip clicked: ${attrName} = ${value}`
+                              );
+                              handleAttributeSelect(attrName, value);
+                            } else {
+                              console.log(
+                                `Chip disabled: ${attrName} = ${value}, hasVariant: ${hasVariant}`
+                              );
+                            }
+                          }}
+                          variant={isSelected ? "filled" : "outlined"}
+                          color={isSelected ? "primary" : "default"}
+                          sx={{
+                            cursor: isDisabled ? "not-allowed" : "pointer",
+                            opacity: isDisabled ? 0.3 : isInStock ? 1 : 0.6,
+                            "&:hover": {
+                              opacity: isDisabled ? 0.3 : 0.8,
+                            },
+                            textTransform: "capitalize",
+                          }}
+                          disabled={isDisabled}
+                        />
+                      );
+                    })}
+                  </Stack>
+                </Box>
               );
             })}
 
@@ -569,45 +656,50 @@ const ProductDetails = ({ product }: ProductDetailsProps) => {
             )}
 
             {/* Price */}
-            <Box sx={{ mt: 2, display: "flex", alignItems: "center", gap: 2, flexWrap: "wrap" }}>
+            <Box
+              sx={{
+                mt: 2,
+                display: "flex",
+                alignItems: "center",
+                gap: 2,
+                flexWrap: "wrap",
+              }}
+            >
               {selectedVariant ? (
                 <>
-                  <Typography
-                    variant="h4"
-                    fontWeight={600}
-                    color="primary"
-                  >
+                  <Typography variant="h4" fontWeight={600} color="primary">
                     {formatPrice(selectedVariant.price)}
                   </Typography>
-                  {selectedVariant.comparePrice && 
-                   parseFloat(selectedVariant.comparePrice) > parseFloat(selectedVariant.price) && (
-                    <>
-                      <Typography
-                        variant="h6"
-                        sx={{
-                          textDecoration: "line-through",
-                          color: "text.secondary",
-                        }}
-                      >
-                        {formatPrice(selectedVariant.comparePrice)}
-                      </Typography>
-                      <Typography
-                        variant="body2"
-                        sx={{
-                          color: "success.main",
-                          fontWeight: 600,
-                        }}
-                      >
-                        {Math.round(
-                          ((parseFloat(selectedVariant.comparePrice) -
-                            parseFloat(selectedVariant.price)) /
-                            parseFloat(selectedVariant.comparePrice)) *
-                            100
-                        )}
-                        % OFF
-                      </Typography>
-                    </>
-                  )}
+                  {selectedVariant.comparePrice &&
+                    parseFloat(selectedVariant.comparePrice) >
+                      parseFloat(selectedVariant.price) && (
+                      <>
+                        <Typography
+                          variant="h6"
+                          sx={{
+                            textDecoration: "line-through",
+                            color: "text.secondary",
+                          }}
+                        >
+                          {formatPrice(selectedVariant.comparePrice)}
+                        </Typography>
+                        <Typography
+                          variant="body2"
+                          sx={{
+                            color: "success.main",
+                            fontWeight: 600,
+                          }}
+                        >
+                          {Math.round(
+                            ((parseFloat(selectedVariant.comparePrice) -
+                              parseFloat(selectedVariant.price)) /
+                              parseFloat(selectedVariant.comparePrice)) *
+                              100
+                          )}
+                          % OFF
+                        </Typography>
+                      </>
+                    )}
                 </>
               ) : (
                 <Typography variant="h4" fontWeight={600} color="primary">
@@ -690,16 +782,30 @@ const ProductDetails = ({ product }: ProductDetailsProps) => {
                 color="primary"
                 fullWidth
                 startIcon={<ShoppingCartIcon />}
-                disabled={!selectedVariant || selectedVariant.inventory?.quantity === 0}
+                disabled={
+                  !selectedVariant || selectedVariant.inventory?.quantity === 0
+                }
                 sx={{
                   borderRadius: 2,
                   textTransform: "none",
                   fontSize: "1rem",
                 }}
-                onClick={() => {
+                onClick={async () => {
                   console.log("Add to Cart clicked", selectedVariant);
-                  // TODO: Add to cart logic with selectedVariant
-                  router.push("/cart");
+                  // Since cookies are HttpOnly, we can't read them client-side
+                  // Check auth status by making an API call (cookies sent automatically)
+                  const isAuthenticated = await checkAuthStatus(() =>
+                    checkAuth("/user/refreshToken", {})
+                  );
+
+                  if (!isAuthenticated) {
+                    // Not authenticated, redirect to login
+                    router.push("/login");
+                  } else {
+                    // Authenticated - navigate to cart
+                    // TODO: Add to cart logic with selectedVariant
+                    router.push("/cart");
+                  }
                 }}
               >
                 Add to Cart
@@ -715,10 +821,7 @@ const ProductDetails = ({ product }: ProductDetailsProps) => {
                   textTransform: "none",
                   fontSize: "1rem",
                 }}
-                onClick={() => {
-                  console.log("Add to Wishlist clicked");
-                  router.push("/wishlist");
-                }}
+                onClick={handleAddToWishlist}
               >
                 Add to Wishlist
               </Button>
@@ -726,7 +829,9 @@ const ProductDetails = ({ product }: ProductDetailsProps) => {
               <Button
                 variant="contained"
                 fullWidth
-                disabled={!selectedVariant || selectedVariant.inventory?.quantity === 0}
+                disabled={
+                  !selectedVariant || selectedVariant.inventory?.quantity === 0
+                }
                 sx={{
                   borderRadius: 2,
                   textTransform: "none",
@@ -736,10 +841,22 @@ const ProductDetails = ({ product }: ProductDetailsProps) => {
                     bgcolor: "#059669",
                   },
                 }}
-                onClick={() => {
+                onClick={async () => {
                   console.log("Buy Now clicked", selectedVariant);
-                  // TODO: Buy now logic with selectedVariant
-                  router.push("/order");
+                  // Since cookies are HttpOnly, we can't read them client-side
+                  // Check auth status by making an API call (cookies sent automatically)
+                  const isAuthenticated = await checkAuthStatus(() =>
+                    checkAuth("/user/refreshToken", {})
+                  );
+
+                  if (!isAuthenticated) {
+                    // Not authenticated, redirect to login
+                    router.push("/login");
+                  } else {
+                    // Authenticated - navigate to order
+                    // TODO: Buy now logic with selectedVariant
+                    router.push("/order");
+                  }
                 }}
               >
                 Buy Now
@@ -843,7 +960,7 @@ const ProductDetails = ({ product }: ProductDetailsProps) => {
               color: theme.palette.text.secondary,
             })}
           >
-           {product?.data?.description}
+            {product?.data?.description}
           </Typography>
         </TabPanel>
         <TabPanel value={activeTab} index="specifications">
@@ -857,11 +974,11 @@ const ProductDetails = ({ product }: ProductDetailsProps) => {
           >
             <ul>
               {selectedVariant?.attributes?.length > 0 ? (
-                selectedVariant.attributes.map((attribute: any, idx: number) => (
-                  <li key={`${attribute.name}-${idx}`}>
-                    {attribute.value}
-                  </li>
-                ))
+                selectedVariant.attributes.map(
+                  (attribute: any, idx: number) => (
+                    <li key={`${attribute.name}-${idx}`}>{attribute.value}</li>
+                  )
+                )
               ) : (
                 <li>No specifications found.</li>
               )}
@@ -880,4 +997,3 @@ const ProductDetails = ({ product }: ProductDetailsProps) => {
 };
 
 export default ProductDetails;
-

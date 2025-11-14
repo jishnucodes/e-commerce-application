@@ -1,7 +1,7 @@
 "use client";
 
-import React from "react";
-import { motion } from 'framer-motion';
+import React, { useEffect } from "react";
+import { motion } from "framer-motion";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination, Autoplay } from "swiper/modules";
 import "swiper/css";
@@ -19,9 +19,44 @@ import {
 } from "@mui/material";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../store";
+import Image from "next/image";
+import { useRouter } from "next/navigation";
 
-const MainInterfaceSlider: React.FC = () => {
+type MainInterfaceSliderProps = {
+  products: any[];
+};
+
+const MainInterfaceSlider: React.FC<MainInterfaceSliderProps> = ({
+  products,
+}) => {
+  const [randomProducts, setRandomProducts] = React.useState<any[]>([]);
   const { isSidebarOpen } = useSelector((state: RootState) => state.header);
+
+  const router = useRouter()
+
+  const getRandomProducts = (productList: any[], count: number) => {
+    if (!productList || productList.length <= count) return productList || [];
+
+    const shuffled = [...productList].sort(() => 0.5 - Math.random());
+    return shuffled.slice(0, count);
+  };
+
+  useEffect(() => {
+  if (!products?.data) return;
+
+  // Set immediately
+  setRandomProducts(getRandomProducts(products.data, 3));
+
+  // Then set every 5 sec
+  const interval = setInterval(() => {
+    setRandomProducts(getRandomProducts(products.data, 3));
+  }, 5000);
+
+  return () => clearInterval(interval);
+}, [products]);
+
+
+  console.log("randomProducts",randomProducts)
 
   const slides = [
     { id: 1, title: "Women's Fashion", img: "/adv-7.jpg" },
@@ -36,8 +71,8 @@ const MainInterfaceSlider: React.FC = () => {
     visible: {
       opacity: 1,
       x: 0,
-      transition: { duration: 0.6, ease: "easeOut" }
-    }
+      transition: { duration: 0.6, ease: "easeOut" },
+    },
   };
 
   const textVariants = {
@@ -45,14 +80,19 @@ const MainInterfaceSlider: React.FC = () => {
     visible: {
       opacity: 1,
       y: 0,
-      transition: { delay: 0.3, duration: 0.6, ease: "easeOut" }
-    }
+      transition: { delay: 0.3, duration: 0.6, ease: "easeOut" },
+    },
   };
 
   return (
     <Box
       sx={{
-        width: { xs: "100%", sm: "100%", md: isSidebarOpen ? "70%" : "100%", lg: isSidebarOpen ? "75%" : "100%" },
+        width: {
+          xs: "100%",
+          sm: "100%",
+          md: isSidebarOpen ? "70%" : "100%",
+          lg: isSidebarOpen ? "75%" : "100%",
+        },
         padding: 2,
         height: "495px",
         boxShadow: "0 4px 12px rgba(0,0,0,0.1)",
@@ -77,8 +117,8 @@ const MainInterfaceSlider: React.FC = () => {
         autoplay={{ delay: 5000, disableOnInteraction: false }}
         loop={true}
       >
-        {slides.map((slide) => (
-          <SwiperSlide key={slide.id}>
+        {randomProducts &&randomProducts.map((obj: any) => (
+          <SwiperSlide key={obj.id}>
             {/* <Box
               sx={{
                 display: "flex",
@@ -101,88 +141,114 @@ const MainInterfaceSlider: React.FC = () => {
               </Typography>
             </Box> */}
             <Card sx={{ width: "100%", height: "460px" }}>
-              <CardActionArea sx={{ display: "flex", flexDirection: { xs: "column", sm: "column", md: "row" }, height: "100%" }}>
-                <CardMedia
-                  component="img"
-                  height="100%"
-                  image={slide.img}
-                  alt="green iguana"
+              <CardActionArea
+                sx={{
+                  display: "flex",
+                  flexDirection: { xs: "column", sm: "column", md: "row" },
+                  height: "100%",
+                }}
+              >
+                <Box
                   sx={{
-                    width: { xs: "100%", sm: "100%", md: "50%" }, // Adjust the width as needed
-                    aspectRatio: { sx: "4/3", sm: "3/4", md: "3/4" },
-                    objectFit: "cover",
-                    order: { xs: 0, sm: 0, md: slide.id % 2 === 0 ? 1 : 0 },
-                    padding: "10px",
-                    borderRadius: "18px"
+                    display: "flex",
+                    flexDirection: "column",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    border: "1px solid #ccc",
+                    borderRadius: 2,
+                    padding: 2,
+                    bgcolor: "white",
                   }}
-                />
+                >
+                  <Image
+                    src={obj?.images[0]?.imageUrl}
+                    width={250}
+                    height={250}
+                    alt="Main Image"
+                    style={{ maxWidth: "100%", height: "auto" }}
+                  />
+                </Box>
                 <CardContent
                   sx={{
                     width: { xs: "100%", sm: "100%", md: "50%" },
                     display: "flex",
                     flexDirection: "column",
                     justifyContent: "center",
-                    order: { xs: 0,  sm: slide.id % 2 === 0 ? 0 : 1,  md: slide.id % 2 === 0 ? 0 : 1 },
+                    order: {
+                      xs: 0,
+                      sm: obj.id % 2 === 0 ? 0 : 1,
+                      md: obj.id % 2 === 0 ? 0 : 1,
+                    },
                     // Added alignment controls
                     textAlign: { xs: "center", sm: "center", md: "left" }, // Changed for xs/sm
-                    alignItems: { xs: "center", sm: "center", md: "flex-start" },// New
+                    alignItems: {
+                      xs: "center",
+                      sm: "center",
+                      md: "flex-start",
+                    }, // New
                     padding: { sm: "20px !important" },
-                    gap: { xs: 1, sm: 2 }
+                    gap: { xs: 1, sm: 2 },
                   }}
                 >
-                  <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }}>
+                  <motion.div
+                    initial="hidden"
+                    whileInView="visible"
+                    viewport={{ once: true }}
+                  >
                     <Typography
                       component={motion.div}
                       variants={titleVariants}
                       gutterBottom
                       variant="h5"
                       sx={(theme) => ({
-                        color: theme.palette.text.primary, 
+                        color: theme.palette.text.primary,
                         fontFamily: "Copeland",
                         fontWeight: 700,
-                        background: 'linear-gradient(45deg, #2b5876 0%, #4e4376 100%)',
-                        WebkitBackgroundClip: 'text',
+                        background:
+                          "linear-gradient(45deg, #2b5876 0%, #4e4376 100%)",
+                        WebkitBackgroundClip: "text",
                         // WebkitTextFillColor: 'transparent',
                         fontSize: {
-                          xs: '1.4rem',   // Mobile
-                          sm: '1.5rem',  // Tablet
-                          md: '3rem'      // Desktop
+                          xs: "1.4rem", // Mobile
+                          sm: "1.5rem", // Tablet
+                          md: "3rem", // Desktop
                         },
-                        textShadow: '0 2px 4px rgba(26, 14, 14, 0.1)',
-                        position: 'relative',
-                        display: 'inline-block',
+                        textShadow: "0 2px 4px rgba(26, 14, 14, 0.1)",
+                        position: "relative",
+                        display: "inline-block",
                         // Added responsive alignment
                         mx: { xs: "auto", sm: 0, md: 0 }, // Center on mobile
-                        '&:after': {
+                        "&:after": {
                           content: '""',
-                          position: 'absolute',
+                          position: "absolute",
                           bottom: -8,
-                          left: { xs: "50%", sm: 0 , md: 0 }, // Center underline on mobile
+                          left: { xs: "50%", sm: 0, md: 0 }, // Center underline on mobile
                           transform: {
                             xs: "translateX(-50%) scaleX(0)",
-                             sm: "scaleX(0)",
-                            md: "scaleX(0)"
+                            sm: "scaleX(0)",
+                            md: "scaleX(0)",
                           },
                           width: { xs: "80%", md: "100%" }, // Adjust underline width for mobile
-                          height: '2px',
-                          background: 'linear-gradient(45deg, #2b5876 0%, #4e4376 100%)',
-                          transformOrigin: 'right',
-                          transition: 'transform 0.3s ease'
+                          height: "2px",
+                          background:
+                            "linear-gradient(45deg, #2b5876 0%, #4e4376 100%)",
+                          transformOrigin: "right",
+                          transition: "transform 0.3s ease",
                         },
-                        '&:hover:after': {
+                        "&:hover:after": {
                           transform: {
                             xs: "translateX(-50%) scaleX(1)",
-                             sm: "scaleX(1)",
-                            md: "scaleX(1)"
+                            sm: "scaleX(1)",
+                            md: "scaleX(1)",
                           },
-                          transformOrigin: 'left'
-                        }
+                          transformOrigin: "left",
+                        },
                       })}
                     >
-                      Lizard
+                      {obj?.name}
                     </Typography>
 
-                    <Typography
+                    {/* <Typography
                       component={motion.div}
                       variants={textVariants}
                       variant="body2"
@@ -213,48 +279,57 @@ const MainInterfaceSlider: React.FC = () => {
                         }
                       })}
                     >
-                      Lizards are a widespread group of squamate reptiles, with over 6,000 species,
-                      ranging across all continents except Antarctica
-                    </Typography>
+                      {obj?.description}
+                    </Typography> */}
                   </motion.div>
 
-                  <CardActions sx={{
-                    justifyContent: { xs: "center", sm: "center", md: "flex-start" }, // Changed
-                    paddingLeft: { sm: "0 !important" }                  
-                  }}>
+                  <CardActions
+                    sx={{
+                      justifyContent: {
+                        xs: "center",
+                        sm: "center",
+                        md: "flex-start",
+                      }, // Changed
+                      paddingLeft: { sm: "0 !important" },
+                    }}
+                  >
                     <Typography
                       sx={{
-                        background: 'blue',
-                        color: 'white',
+                        background: "blue",
+                        color: "white",
                         px: 3,
                         py: 1,
-                        mb:2,
+                        mb: 2,
                         borderRadius: 1,
-                        cursor: 'pointer',
-                        textTransform: 'uppercase',
-                        fontWeight: 'bold',
-                        fontFamily:"CaviarDreams_Bold",
-                        transition: 'all 0.3s ease',
-                        display: 'inline-block',
+                        cursor: "pointer",
+                        textTransform: "uppercase",
+                        fontWeight: "bold",
+                        fontFamily: "CaviarDreams_Bold",
+                        transition: "all 0.3s ease",
+                        display: "inline-block",
                         width: { xs: "90%", sm: "auto" }, // Full width on mobile
                         minWidth: { sm: "140px" },
                         textAlign: "center", // Center text
-                        '&:hover': {
-                          background: '#1565c0',
-                          transform: 'translateY(-2px)',
-                          boxShadow: 3
+                        "&:hover": {
+                          background: "#1565c0",
+                          transform: "translateY(-2px)",
+                          boxShadow: 3,
                         },
-                        '&:active': { transform: 'scale(0.98)' },
+                        "&:active": { transform: "scale(0.98)" },
                         fontSize: {
-                          xs: '0.875rem',
-                          sm: '1rem',
-                          md: '1.1rem'
+                          xs: "0.875rem",
+                          sm: "1rem",
+                          md: "1.1rem",
                         },
                         letterSpacing: {
-                          xs: '0.5px',
-                          sm: '0.75px',
-                          md: '1px'
-                        }
+                          xs: "0.5px",
+                          sm: "0.75px",
+                          md: "1px",
+                        },
+                      }}
+                      onClick={() => { 
+                        console.log("clicked shop button")
+                        router.push(`/product/${obj?.subCategory?.slug}/${obj?.slug}`)
                       }}
                     >
                       Shop

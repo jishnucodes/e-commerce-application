@@ -52,7 +52,12 @@ const categories = [
   }
 ];
 
-const HeaderSlider = () => {
+type HeaderSliderProps = {
+    brands: any[]
+}
+
+const HeaderSlider: React.FC<HeaderSliderProps>  = ({brands}) => {
+  
   const [hoveredIndex, setHoveredIndex] = useState(null);
 
   return (
@@ -92,7 +97,7 @@ const HeaderSlider = () => {
           width: '100%',
         }}
       >
-        {categories.map((category, index) => {
+        {brands?.data?.length > 0 ? brands?.data?.map((category, index) => {
           const angle = (index / categories.length) * Math.PI * 2;
           const x = Math.cos(angle) * 20;
           const scale = Math.sin(angle) * 0.1 + 0.9;
@@ -175,7 +180,7 @@ const HeaderSlider = () => {
                     >
                       <Image
                         src={category.image}
-                        alt={category.name}
+                        alt={category.slug}
                         width={80}
                         height={70}
                         style={{ 
@@ -210,7 +215,9 @@ const HeaderSlider = () => {
               </Link>
             </motion.div>
           );
-        })}
+        })
+       : null
+      }
       </motion.div>
     </Box>
   );

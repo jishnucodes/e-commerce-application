@@ -25,9 +25,9 @@ import Searchbar from "./components/Searchbar";
 import MenuIcon from "@mui/icons-material/Menu";
 import ContactMailIcon from "@mui/icons-material/ContactMail";
 import LanguageIcon from "@mui/icons-material/Language";
-import PersonIcon from "@mui/icons-material/Person";
 import { ArrowDownwardSharp, DarkMode } from "@mui/icons-material";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
+import PersonIcon from '@mui/icons-material/Person';
 import LightModeIcon from "@mui/icons-material/LightMode";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../../store";
@@ -35,6 +35,7 @@ import { toggleTheme } from "@/slices/themeSlice";
 import DropdownNavButton from "./components/DropdownNavButton";
 import SubHeader from "./components/Subheader";
 import MobileViewTabs from "../mobile-view-tabs/MobileViewTabs";
+import { useRouter } from "next/navigation";
 
 const Header = () => {
   const [mobileOpen, setMobileOpen] = React.useState(false);
@@ -44,6 +45,7 @@ const Header = () => {
   const { themeMode } = useSelector((state: RootState) => state.theme);
 
   const theme = useTheme();
+  const router = useRouter();
 
   useEffect(() => {
     // Simulate loading time
@@ -83,7 +85,8 @@ const Header = () => {
     {
       id: 3,
       icon: <ArrowDropDownIcon />,
-      label: "More",
+      startIcon: <PersonIcon />,
+      label: "Profile",
     },
   ];
 

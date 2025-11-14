@@ -1,108 +1,53 @@
-"use client";
-import React, { useEffect, useState } from "react";
-import {
-  Box,
-  Button,
-  Card,
-  CardActions,
-  CardContent,
-  CardMedia,
-  Typography,
-  useMediaQuery,
-  useTheme,
-} from "@mui/material";
-import Image from "next/image";
-import SliderComponent from "@/components/slider/SliderComponent";
-import MainInterfaceSlider from "@/components/slider/MainInterfaceSlider";
-import Sidebar from "@/components/sidebar/Sidebar";
-import FeaturesList from "@/components/features-list/FeaturesList";
-import { useSelector } from "react-redux";
-import BottomNavigationComponent from "@/components/bottom-navigation/BottomNavigation";
-import { RootState } from "../../../store";
-import MainPageSkeleton from "@/components/skeleton/MainPageSkeleton";
-import Loading from "@/components/loading/Loading";
-import HeaderSlider from "@/components/HeaderSlider/HeaderSlider";
-import { useApiCalls } from "@/hooks/useApiCalls";
-export default function Home() {
-  const { data: categories, loading, error, get } = useApiCalls();
-  const { isSidebarOpen } = useSelector((state: RootState) => state.header);
-  // const [loading, setLoading] = useState(true);
+import Home from "@/components/home/Home";
 
-  const theme = useTheme();
-  const isSmallScreen = useMediaQuery(theme.breakpoints.down("md"));
 
-  // useEffect(() => {
-  //   // Simulate loading time
-  //   const timer = setTimeout(() => {
-  //     setLoading(false);
-  //   }, 2000);
 
-  //   return () => clearTimeout(timer);
-  // }, []);
+async function fetchProducts() {
+  try {
+    const baseUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api";
+    const res = await fetch(`${baseUrl}/product/list`, {
+      cache: "no-store",
+      next: { revalidate: 3600 }, // Revalidate every hour
+    });
 
-  useEffect(() => {
-      get("/category/list");
-    }, []);
+    if (!res.ok) {
+      return null;
+    }
 
-  if (loading) {
-    return (
-      <>
-      <Loading />
-      <MainPageSkeleton />
-      </>
-    );
+    const products = await res.json();
+    return products;
+  } catch (error) {
+    console.error("Error fetching products:", error);
+    return null;
   }
+}
 
+async function fetchBrands() {
+  try {
+    const baseUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api";
+    const res = await fetch(`${baseUrl}/brand/list`, {
+      cache: "no-store",
+      next: { revalidate: 3600 }, // Revalidate every hour
+    });
+
+    if (!res.ok) {
+      return null;
+    }
+
+    const brands = await res.json();
+    return brands;
+  } catch (error) {
+    console.error("Error fetching brands:", error);
+    return null;
+  }
+}
+
+export default async function HomePage() {
+  const [products, brands] = await Promise.all([fetchProducts(), fetchBrands()]);
+  console.log("brands", brands)
+
+  console.log("product list: ", products)
   return (
-    <Box
-      sx={{
-        // width: "100%"
-        display: "flex",
-        flexDirection: "column",
-      }}
-    >
-      <Box
-        sx={{
-          display: "flex",
-          flexDirection: "row",
-          gap: 2,
-        }}
-      >
-        {
-          isSidebarOpen ? (
-            <Box
-              component="aside"
-              sx={{
-                width: { xs: "100%", sm: "30%", md: "25%" }, // Full-width on small screens, 25% on md+
-                flexShrink: 0, // Prevent sidebar from shrinking
-                display: { xs: "none", sm: "none", md: "block" }, // Hide sidebar on extra-small screens
-              }}
-              height="495px"
-            >
-            
-                <Sidebar categories={categories} />
-              
-
-            </Box>
-          ) : null
-        }
-      
-         
-          <MainInterfaceSlider />
-        
-      </Box>
-      <HeaderSlider />
-      <Box sx={{ mt: 3 }}>
-        
-          <FeaturesList />
-        
-      </Box>
-
-      <Box sx={{ mt: 3 }}>
-        
-          <SliderComponent />
-        
-      </Box>
-    </Box>
-  );
+    <Home products={products} brands={brands} />
+  )
 }

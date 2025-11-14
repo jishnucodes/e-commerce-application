@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import {
   Container,
   Typography,
@@ -14,13 +14,161 @@ import {
 } from "@mui/material";
 import Grid from "@mui/material/Grid2";
 import { Visibility, VisibilityOff, Person, Email, Lock } from "@mui/icons-material";
+import { useFormik } from "formik";
+import * as Yup from "yup";
+import { useApiCalls } from "@/hooks/useApiCalls";
+import { useRouter } from "next/navigation";
+
+type FormData = {
+  userName: string;
+  email: string;
+  password: string;
+  confirmPassword: string;
+}
+
+// Validation schema for Sign Up
+const signUpValidationSchema = Yup.object({
+  userName: Yup.string()
+    .min(3, "User Name must be at least 3 characters")
+    .max(20, "User Name must be at most 20 characters")
+    .required("User Name is required")
+    .matches(/^[a-zA-Z0-9_]+$/, "User Name can only contain letters, numbers, and underscores"),
+  email: Yup.string()
+    .email("Invalid email address")
+    .required("Email is required"),
+  password: Yup.string()
+    .min(8, "Password must be at least 8 characters")
+    .required("Password is required")
+    .matches(
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/,
+      "Password must contain at least one uppercase letter, one lowercase letter, and one number"
+    ),
+  confirmPassword: Yup.string()
+    .oneOf([Yup.ref("password")], "Passwords must match")
+    .required("Please confirm your password"),
+});
+
+// Validation schema for Login
+const loginValidationSchema = Yup.object({
+  email: Yup.string()
+    .email("Invalid email address")
+    .required("Email is required"),
+  password: Yup.string()
+    .required("Password is required"),
+});
 
 const LoginPage = () => {
+
+  const {
+    data: signupData,
+    loading: signupLoading,
+    error: signupError,
+    post: signup,
+  } = useApiCalls();
+  const {
+    data: loginData,
+    loading: loginLoading,
+    error: loginError,
+    post: login,
+  } = useApiCalls();
+
   const [showPassword, setShowPassword] = useState(false);
-  const [isLogin, setIsLogin] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [isLogin, setIsLogin] = useState(true);
   const theme = useTheme();
+  const router = useRouter()
 
   const handleClickShowPassword = () => setShowPassword((show) => !show);
+  const handleClickShowConfirmPassword = () => setShowConfirmPassword((show) => !show);
+
+  const initialValues: FormData = {
+    userName: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
+  };
+
+  const formik = useFormik<FormData>({
+    initialValues,
+    validationSchema: isLogin ? loginValidationSchema : signUpValidationSchema,
+    enableReinitialize: true,
+    onSubmit: async (values, { setSubmitting, setFieldError }) => {
+      try {
+        if (isLogin) {
+          // Login logic - use the response directly (not state, as state updates are async)
+          console.log("Logging in with:", { email: values.email, password: values.password });
+          const response = await login("/user/signin", {
+            email: values.email,
+            password: values.password,
+          });
+          
+          // Response is returned directly from the API call
+          if (response && (response as any).status === true) {
+            console.log("Login successful");
+            // Cookies are set automatically by server (HttpOnly)
+            // Redirect to home page
+            router.push("/");
+          } else {
+            // Login failed - show error
+            const errorMessage = (response as any)?.message || "Invalid email or password";
+            console.log("Login failed:", errorMessage);
+            setFieldError("email", errorMessage);
+            setFieldError("password", errorMessage);
+          }
+        } else {
+          // Signup logic - use the response directly
+          console.log("Signing up with:", values);
+          const response = await signup("/user/signup", {
+            userName: values.userName,
+            email: values.email,
+            password: values.password,
+          });
+          
+          // Response is returned directly from the API call
+          if (response && (response as any).status === true) {
+            console.log("Signup successful");
+            // Switch to login mode after successful signup
+            setIsLogin(true);
+            formik.resetForm();
+          } else {
+            // Signup failed - show errors
+            const responseData = response as any;
+            console.log("Signup failed:", responseData?.message || "Signup failed");
+            
+            if (responseData?.errors) {
+              // Handle field-specific errors
+              Object.keys(responseData.errors).forEach((key) => {
+                setFieldError(key as keyof FormData, responseData.errors[key]);
+              });
+            } else {
+              const errorMessage = responseData?.message || "Signup failed. Please try again.";
+              setFieldError("email", errorMessage);
+            }
+          }
+        }
+      } catch (error: any) {
+        console.error("Authentication error:", error);
+        // Handle API errors (network errors, 4xx, 5xx, etc.)
+        if (error.response?.data?.errors) {
+          const errors = error.response.data.errors;
+          Object.keys(errors).forEach((key) => {
+            setFieldError(key as keyof FormData, errors[key]);
+          });
+        } else {
+          setFieldError("email", error.message || "An error occurred. Please try again.");
+        }
+      } finally {
+        setSubmitting(false);
+      }
+    },
+  });
+
+  const handleToggleMode = () => {
+    setIsLogin(!isLogin);
+    setShowPassword(false);
+    setShowConfirmPassword(false);
+    formik.resetForm();
+  };
 
   // Memoize styles based on theme mode
   const styles = useMemo(() => {
@@ -214,16 +362,23 @@ const LoginPage = () => {
 
             <Box
               component="form"
-              noValidate
+              onSubmit={formik.handleSubmit}
               sx={{ display: "flex", flexDirection: "column", gap: 2.5 }}
+              noValidate
             >
               <Grid container spacing={2.5}>
                 {!isLogin && (
                   <Grid size={{ xs: 12 }}>
                     <TextField
-                      required
                       fullWidth
-                      label="Username"
+                      id="userName"
+                      name="userName"
+                      label="User Name"
+                      value={formik.values.userName}
+                      onChange={formik.handleChange}
+                      onBlur={formik.handleBlur}
+                      error={formik.touched.userName && Boolean(formik.errors.userName)}
+                      helperText={formik.touched.userName && formik.errors.userName}
                       variant="outlined"
                       InputProps={{
                         startAdornment: (
@@ -240,10 +395,16 @@ const LoginPage = () => {
                 {/* Email Field */}
                 <Grid size={{ xs: 12 }}>
                   <TextField
-                    required
                     fullWidth
+                    id="email"
+                    name="email"
                     label="Email Address"
                     type="email"
+                    value={formik.values.email}
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
+                    error={formik.touched.email && Boolean(formik.errors.email)}
+                    helperText={formik.touched.email && formik.errors.email}
                     variant="outlined"
                     InputProps={{
                       startAdornment: (
@@ -259,10 +420,16 @@ const LoginPage = () => {
                 {/* Password Field */}
                 <Grid size={{ xs: 12 }}>
                   <TextField
-                    required
                     fullWidth
+                    id="password"
+                    name="password"
                     label="Password"
                     type={showPassword ? "text" : "password"}
+                    value={formik.values.password}
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
+                    error={formik.touched.password && Boolean(formik.errors.password)}
+                    helperText={formik.touched.password && formik.errors.password}
                     variant="outlined"
                     InputProps={{
                       startAdornment: (
@@ -290,15 +457,33 @@ const LoginPage = () => {
                 {!isLogin && (
                   <Grid size={{ xs: 12 }}>
                     <TextField
-                      required
                       fullWidth
+                      id="confirmPassword"
+                      name="confirmPassword"
                       label="Confirm Password"
-                      type="password"
+                      type={showConfirmPassword ? "text" : "password"}
+                      value={formik.values.confirmPassword}
+                      onChange={formik.handleChange}
+                      onBlur={formik.handleBlur}
+                      error={formik.touched.confirmPassword && Boolean(formik.errors.confirmPassword)}
+                      helperText={formik.touched.confirmPassword && formik.errors.confirmPassword}
                       variant="outlined"
                       InputProps={{
                         startAdornment: (
                           <InputAdornment position="start">
                             <Lock sx={{ color: styles.iconColor }} />
+                          </InputAdornment>
+                        ),
+                        endAdornment: (
+                          <InputAdornment position="end">
+                            <IconButton
+                              onClick={handleClickShowConfirmPassword}
+                              edge="end"
+                              sx={{ color: styles.iconColor }}
+                              aria-label="toggle confirm password visibility"
+                            >
+                              {showConfirmPassword ? <VisibilityOff /> : <Visibility />}
+                            </IconButton>
                           </InputAdornment>
                         ),
                       }}
@@ -310,9 +495,11 @@ const LoginPage = () => {
                 {/* Submit Button */}
                 <Grid size={{ xs: 12 }}>
                   <Button
+                    type="submit"
                     fullWidth
                     variant="contained"
                     size="large"
+                    disabled={formik.isSubmitting || loginLoading || signupLoading}
                     sx={{
                       mt: 1,
                       py: 1.75,
@@ -333,9 +520,17 @@ const LoginPage = () => {
                       "&:active": {
                         transform: "translateY(0)",
                       },
+                      "&:disabled": {
+                        opacity: 0.6,
+                        cursor: "not-allowed",
+                      },
                     }}
                   >
-                    {isLogin ? "Sign In" : "Create Account"}
+                    {formik.isSubmitting
+                      ? "Please wait..."
+                      : isLogin
+                      ? "Sign In"
+                      : "Create Account"}
                   </Button>
                 </Grid>
 
@@ -354,7 +549,7 @@ const LoginPage = () => {
                       underline="hover"
                       onClick={(e) => {
                         e.preventDefault();
-                        setIsLogin(!isLogin);
+                        handleToggleMode();
                       }}
                       sx={{
                         color: theme.palette.primary.main,
